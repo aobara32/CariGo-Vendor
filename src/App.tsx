@@ -1,27 +1,43 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { LanguageProvider } from './contexts/LanguageContext'
+import ScrollToTop from './components/ScrollToTop'
+import MerchantLayout from './layouts/MerchantLayout'
+import Index from './pages/Index'
+import About from './pages/About'
+import Features from './pages/Features'
+import Pricing from './pages/Pricing'
+import GettingStarted from './pages/GettingStarted'
+import Support from './pages/Support'
+import FAQ from './pages/FAQ'
+import Apply from './pages/Apply'
 
-const queryClient = new QueryClient();
+const Placeholder = ({ title }: { title: string }) => (
+  <div className="container mx-auto px-4 py-20">
+    <h1 className="text-3xl font-bold">{title}</h1>
+    <p className="text-muted-foreground mt-2">Page content will be restored.</p>
+  </div>
+)
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+function App() {
+  return (
+    <LanguageProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/getting-started" element={<GettingStarted />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/apply" element={<Apply />} />
         </Routes>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </LanguageProvider>
+  )
+}
 
-export default App;
+export default App
+
