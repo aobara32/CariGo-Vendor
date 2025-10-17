@@ -1,46 +1,63 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Mail, Phone } from 'lucide-react'
 
 const MerchantFooter = () => {
   return (
-    <footer className="border-t">
+    <footer className="border-t bg-white">
       <div className="container mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
+        <div className="lg:col-span-2">
+          <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
             </div>
             <span className="text-xl font-bold">CariGo</span>
           </div>
-          <p className="text-muted-foreground">Local e-commerce platform for Brunei merchants.</p>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+            Empowering desital platform that grows alongside Bruneis retal market.
+          </p>
+          
+          {/* Contact Info */}
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 text-sm">
+              <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <a href="mailto:carigobn@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                carigobn@gmail.com
+              </a>
+            </div>
+            <div className="flex items-start gap-3 text-sm">
+              <Phone className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <a href="tel:+6732123456" className="text-muted-foreground hover:text-primary transition-colors">
+                +673 212 3456
+              </a>
+            </div>
+          </div>
         </div>
+        
         <div>
           <div className="font-semibold mb-3">Platform</div>
           <ul className="space-y-2">
-            <li><Link to="/features" className="hover:text-primary">Features</Link></li>
-            <li><Link to="/pricing" className="hover:text-primary">Pricing</Link></li>
-            <li><Link to="/support" className="hover:text-primary">Support</Link></li>
+            <li><Link to="/features" className="text-muted-foreground hover:text-primary transition-colors">Features</Link></li>
+            <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
+            <li><Link to="/getting-started" className="text-muted-foreground hover:text-primary transition-colors">Getting Started</Link></li>
+            <li><Link to="/support" className="text-muted-foreground hover:text-primary transition-colors">Support</Link></li>
           </ul>
         </div>
+        
         <div>
           <div className="font-semibold mb-3">Company</div>
           <ul className="space-y-2">
-            <li><Link to="/about" className="hover:text-primary">About</Link></li>
-            <li><Link to="/faq" className="hover:text-primary">FAQ</Link></li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-semibold mb-3">Contact</div>
-          <ul className="space-y-2">
-            <li><a className="hover:text-primary" href="mailto:carigobn@gmail.com">carigobn@gmail.com</a></li>
-            <li><a className="hover:text-primary" href="tel:+6732123456">+673 212 3456</a></li>
+            <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
+            <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
           </ul>
         </div>
       </div>
-      <div className="border-t py-4 text-center text-xs text-muted-foreground">© {new Date().getFullYear()} CariGo</div>
+      
+      <div className="border-t py-4 text-center text-xs text-muted-foreground">
+        © {new Date().getFullYear()} CariGo. All rights reserved.
+      </div>
     </footer>
   )
 }
 
 export default MerchantFooter
-

@@ -28,5 +28,3 @@ export const useLanguage = () => {
   if (!ctx) throw new Error('useLanguage must be used within LanguageProvider')
   return ctx
 }
-
-

@@ -1,5 +1,6 @@
-import MerchantHeader from '@/components/MerchantHeader'
-import MerchantFooter from '@/components/MerchantFooter'
+import React from 'react'
+import MerchantHeader from '../components/MerchantHeader'
+import MerchantFooter from '../components/MerchantFooter'
 
 const MerchantLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -12,4 +13,3 @@ const MerchantLayout = ({ children }: { children: React.ReactNode }) => {
 }
 
 export default MerchantLayout
-

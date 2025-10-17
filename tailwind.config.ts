@@ -6,7 +6,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // HSL via CSS variables for shadcn compatibility
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -48,4 +47,3 @@ const config: Config = {
 }
 
 export default config
-

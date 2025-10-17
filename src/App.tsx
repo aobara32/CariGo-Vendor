@@ -11,13 +11,7 @@ import GettingStarted from './pages/GettingStarted'
 import Support from './pages/Support'
 import FAQ from './pages/FAQ'
 import Apply from './pages/Apply'
-
-const Placeholder = ({ title }: { title: string }) => (
-  <div className="container mx-auto px-4 py-20">
-    <h1 className="text-3xl font-bold">{title}</h1>
-    <p className="text-muted-foreground mt-2">Page content will be restored.</p>
-  </div>
-)
+import HelpCenter from './pages/HelpCenter'
 
 function App() {
   return (
@@ -33,6 +27,7 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/apply" element={<Apply />} />
+          <Route path="/help" element={<HelpCenter />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>
@@ -40,4 +35,3 @@ function App() {
 }
 
 export default App
-
