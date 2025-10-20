@@ -136,7 +136,7 @@ const FAQ = () => {
             },
             {
               question: 'Is there training available?',
-              answer: 'Yes! CariGo Academy offers free courses on store setup, product photography, digital marketing, and more. Pro plan users also get personalized training sessions with our experts.'
+              answer: 'CariGo Academy is coming soon! We are preparing comprehensive training content including store setup, product photography, digital marketing, and more. Pro plan users will also get personalized training sessions with our experts.'
             },
             {
               question: 'Can I get help with my store setup?',
@@ -163,7 +163,7 @@ const FAQ = () => {
           {
             icon: Phone,
             title: 'Phone Support',
-            description: '+673 212 3456',
+            description: '+673 822 8250',
             action: 'Call Now'
           },
           {
@@ -287,7 +287,7 @@ const FAQ = () => {
             },
             {
               question: 'Adakah latihan tersedia?',
-              answer: 'Ya! Akademi CariGo menawarkan kursus percuma tentang persediaan kedai, fotografi produk, pemasaran digital, dan banyak lagi. Pengguna pelan Pro juga mendapat sesi latihan peribadi dengan pakar kami.'
+              answer: 'Akademi CariGo akan datang! Kami sedang menyediakan kandungan latihan komprehensif termasuk persediaan kedai, fotografi produk, pemasaran digital, dan banyak lagi. Pengguna pelan Pro juga akan mendapat sesi latihan peribadi dengan pakar kami.'
             },
             {
               question: 'Bolehkah saya mendapat bantuan dengan persediaan kedai saya?',
@@ -314,7 +314,7 @@ const FAQ = () => {
           {
             icon: Phone,
             title: 'Sokongan Telefon',
-            description: '+673 212 3456',
+            description: '+673 822 8250',
             action: 'Panggil Sekarang'
           },
           {
@@ -417,10 +417,10 @@ const FAQ = () => {
                   <h3 className="text-2xl font-bold mb-4">{option.title}</h3>
                   <p className="text-lg font-semibold text-primary mb-4">{option.description}</p>
                   {option.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
-                    <a href="tel:+6732123456" className="block">
+                        <a href="tel:+6738228250" className="block">
                       <Button variant="outline" className="w-full">
                         {option.action}
-                      </Button>
+                      </Button> 
                     </a>
                   ) : option.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
                     <a href="mailto:carigobn@gmail.com" className="block">

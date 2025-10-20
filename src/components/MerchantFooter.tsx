@@ -5,8 +5,8 @@ import { Mail, Phone } from 'lucide-react'
 const MerchantFooter = () => {
   return (
     <footer className="border-t bg-white">
-      <div className="container mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm">
-        <div className="lg:col-span-2">
+      <div className="container mx-auto px-4 py-10 grid grid-cols-4 gap-8 text-sm">
+        <div>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
@@ -27,8 +27,8 @@ const MerchantFooter = () => {
             </div>
             <div className="flex items-start gap-3 text-sm">
               <Phone className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-              <a href="tel:+6732123456" className="text-muted-foreground hover:text-primary transition-colors">
-                +673 212 3456
+              <a href="tel:+6738228250" className="text-muted-foreground hover:text-primary transition-colors">
+                +673 822 8250
               </a>
             </div>
           </div>
@@ -49,6 +49,18 @@ const MerchantFooter = () => {
           <ul className="space-y-2">
             <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
             <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="font-semibold mb-3">Documentation</div>
+          <ul className="space-y-2">
+            <li><Link to="/manual/getting-started" className="text-muted-foreground hover:text-primary transition-colors">Getting Started</Link></li>
+            <li><Link to="/manual/store-management" className="text-muted-foreground hover:text-primary transition-colors">Store Management</Link></li>
+            <li><Link to="/manual/product-catalog" className="text-muted-foreground hover:text-primary transition-colors">Product Catalog</Link></li>
+            <li><Link to="/manual/order-processing" className="text-muted-foreground hover:text-primary transition-colors">Order Processing</Link></li>
+            <li><Link to="/manual/customer-management" className="text-muted-foreground hover:text-primary transition-colors">Customer Management</Link></li>
+            <li><Link to="/manual/analytics-reporting" className="text-muted-foreground hover:text-primary transition-colors">Analytics & Reporting</Link></li>
           </ul>
         </div>
       </div>

@@ -45,12 +45,13 @@ const Apply = () => {
     firstName: '',
     lastName: '',
     email: '',
+    phoneCountry: '+673', // Brunei default
     phone: '',
-    nationalId: '',
     
     // Business Information
     businessName: '',
     businessType: '',
+    hasBusinessNumber: false,
     businessRegistration: '',
     businessAddress: '',
     businessDescription: '',
@@ -68,7 +69,6 @@ const Apply = () => {
     
     // Documents
     documents: {
-      nationalId: null as File | null,
       businessRegistration: null as File | null,
       bankStatement: null as File | null,
       proofOfAddress: null as File | null
@@ -77,8 +77,248 @@ const Apply = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Country codes with Brunei first, Malaysia second, then alphabetical
+  const countryCodes = [
+    { code: '+673', country: 'Brunei', flag: '🇧🇳' },
+    { code: '+60', country: 'Malaysia', flag: '🇲🇾' },
+    { code: '+93', country: 'Afghanistan', flag: '🇦🇫' },
+    { code: '+355', country: 'Albania', flag: '🇦🇱' },
+    { code: '+213', country: 'Algeria', flag: '🇩🇿' },
+    { code: '+1', country: 'American Samoa', flag: '🇦🇸' },
+    { code: '+376', country: 'Andorra', flag: '🇦🇩' },
+    { code: '+244', country: 'Angola', flag: '🇦🇴' },
+    { code: '+1', country: 'Anguilla', flag: '🇦🇮' },
+    { code: '+1', country: 'Antarctica', flag: '🇦🇶' },
+    { code: '+1', country: 'Antigua and Barbuda', flag: '🇦🇬' },
+    { code: '+54', country: 'Argentina', flag: '🇦🇷' },
+    { code: '+374', country: 'Armenia', flag: '🇦🇲' },
+    { code: '+297', country: 'Aruba', flag: '🇦🇼' },
+    { code: '+61', country: 'Australia', flag: '🇦🇺' },
+    { code: '+43', country: 'Austria', flag: '🇦🇹' },
+    { code: '+994', country: 'Azerbaijan', flag: '🇦🇿' },
+    { code: '+1', country: 'Bahamas', flag: '🇧🇸' },
+    { code: '+973', country: 'Bahrain', flag: '🇧🇭' },
+    { code: '+880', country: 'Bangladesh', flag: '🇧🇩' },
+    { code: '+1', country: 'Barbados', flag: '🇧🇧' },
+    { code: '+375', country: 'Belarus', flag: '🇧🇾' },
+    { code: '+32', country: 'Belgium', flag: '🇧🇪' },
+    { code: '+501', country: 'Belize', flag: '🇧🇿' },
+    { code: '+229', country: 'Benin', flag: '🇧🇯' },
+    { code: '+1', country: 'Bermuda', flag: '🇧🇲' },
+    { code: '+975', country: 'Bhutan', flag: '🇧🇹' },
+    { code: '+591', country: 'Bolivia', flag: '🇧🇴' },
+    { code: '+387', country: 'Bosnia and Herzegovina', flag: '🇧🇦' },
+    { code: '+267', country: 'Botswana', flag: '🇧🇼' },
+    { code: '+55', country: 'Brazil', flag: '🇧🇷' },
+    { code: '+246', country: 'British Indian Ocean Territory', flag: '🇮🇴' },
+    { code: '+1', country: 'British Virgin Islands', flag: '🇻🇬' },
+    { code: '+673', country: 'Brunei', flag: '🇧🇳' },
+    { code: '+359', country: 'Bulgaria', flag: '🇧🇬' },
+    { code: '+226', country: 'Burkina Faso', flag: '🇧🇫' },
+    { code: '+257', country: 'Burundi', flag: '🇧🇮' },
+    { code: '+855', country: 'Cambodia', flag: '🇰🇭' },
+    { code: '+237', country: 'Cameroon', flag: '🇨🇲' },
+    { code: '+1', country: 'Canada', flag: '🇨🇦' },
+    { code: '+238', country: 'Cape Verde', flag: '🇨🇻' },
+    { code: '+1', country: 'Cayman Islands', flag: '🇰🇾' },
+    { code: '+236', country: 'Central African Republic', flag: '🇨🇫' },
+    { code: '+235', country: 'Chad', flag: '🇹🇩' },
+    { code: '+56', country: 'Chile', flag: '🇨🇱' },
+    { code: '+86', country: 'China', flag: '🇨🇳' },
+    { code: '+61', country: 'Christmas Island', flag: '🇨🇽' },
+    { code: '+61', country: 'Cocos Islands', flag: '🇨🇨' },
+    { code: '+57', country: 'Colombia', flag: '🇨🇴' },
+    { code: '+269', country: 'Comoros', flag: '🇰🇲' },
+    { code: '+242', country: 'Congo', flag: '🇨🇬' },
+    { code: '+243', country: 'Congo, Democratic Republic', flag: '🇨🇩' },
+    { code: '+682', country: 'Cook Islands', flag: '🇨🇰' },
+    { code: '+506', country: 'Costa Rica', flag: '🇨🇷' },
+    { code: '+225', country: 'Côte d\'Ivoire', flag: '🇨🇮' },
+    { code: '+385', country: 'Croatia', flag: '🇭🇷' },
+    { code: '+53', country: 'Cuba', flag: '🇨🇺' },
+    { code: '+357', country: 'Cyprus', flag: '🇨🇾' },
+    { code: '+420', country: 'Czech Republic', flag: '🇨🇿' },
+    { code: '+45', country: 'Denmark', flag: '🇩🇰' },
+    { code: '+253', country: 'Djibouti', flag: '🇩🇯' },
+    { code: '+1', country: 'Dominica', flag: '🇩🇲' },
+    { code: '+1', country: 'Dominican Republic', flag: '🇩🇴' },
+    { code: '+593', country: 'Ecuador', flag: '🇪🇨' },
+    { code: '+20', country: 'Egypt', flag: '🇪🇬' },
+    { code: '+503', country: 'El Salvador', flag: '🇸🇻' },
+    { code: '+240', country: 'Equatorial Guinea', flag: '🇬🇶' },
+    { code: '+291', country: 'Eritrea', flag: '🇪🇷' },
+    { code: '+372', country: 'Estonia', flag: '🇪🇪' },
+    { code: '+251', country: 'Ethiopia', flag: '🇪🇹' },
+    { code: '+500', country: 'Falkland Islands', flag: '🇫🇰' },
+    { code: '+298', country: 'Faroe Islands', flag: '🇫🇴' },
+    { code: '+679', country: 'Fiji', flag: '🇫🇯' },
+    { code: '+358', country: 'Finland', flag: '🇫🇮' },
+    { code: '+33', country: 'France', flag: '🇫🇷' },
+    { code: '+594', country: 'French Guiana', flag: '🇬🇫' },
+    { code: '+689', country: 'French Polynesia', flag: '🇵🇫' },
+    { code: '+241', country: 'Gabon', flag: '🇬🇦' },
+    { code: '+220', country: 'Gambia', flag: '🇬🇲' },
+    { code: '+995', country: 'Georgia', flag: '🇬🇪' },
+    { code: '+49', country: 'Germany', flag: '🇩🇪' },
+    { code: '+233', country: 'Ghana', flag: '🇬🇭' },
+    { code: '+350', country: 'Gibraltar', flag: '🇬🇮' },
+    { code: '+30', country: 'Greece', flag: '🇬🇷' },
+    { code: '+299', country: 'Greenland', flag: '🇬🇱' },
+    { code: '+1', country: 'Grenada', flag: '🇬🇩' },
+    { code: '+590', country: 'Guadeloupe', flag: '🇬🇵' },
+    { code: '+1', country: 'Guam', flag: '🇬🇺' },
+    { code: '+502', country: 'Guatemala', flag: '🇬🇹' },
+    { code: '+224', country: 'Guinea', flag: '🇬🇳' },
+    { code: '+245', country: 'Guinea-Bissau', flag: '🇬🇼' },
+    { code: '+592', country: 'Guyana', flag: '🇬🇾' },
+    { code: '+509', country: 'Haiti', flag: '🇭🇹' },
+    { code: '+504', country: 'Honduras', flag: '🇭🇳' },
+    { code: '+852', country: 'Hong Kong', flag: '🇭🇰' },
+    { code: '+36', country: 'Hungary', flag: '🇭🇺' },
+    { code: '+354', country: 'Iceland', flag: '🇮🇸' },
+    { code: '+91', country: 'India', flag: '🇮🇳' },
+    { code: '+62', country: 'Indonesia', flag: '🇮🇩' },
+    { code: '+98', country: 'Iran', flag: '🇮🇷' },
+    { code: '+964', country: 'Iraq', flag: '🇮🇶' },
+    { code: '+353', country: 'Ireland', flag: '🇮🇪' },
+    { code: '+972', country: 'Israel', flag: '🇮🇱' },
+    { code: '+39', country: 'Italy', flag: '🇮🇹' },
+    { code: '+1', country: 'Jamaica', flag: '🇯🇲' },
+    { code: '+81', country: 'Japan', flag: '🇯🇵' },
+    { code: '+962', country: 'Jordan', flag: '🇯🇴' },
+    { code: '+7', country: 'Kazakhstan', flag: '🇰🇿' },
+    { code: '+254', country: 'Kenya', flag: '🇰🇪' },
+    { code: '+686', country: 'Kiribati', flag: '🇰🇮' },
+    { code: '+965', country: 'Kuwait', flag: '🇰🇼' },
+    { code: '+996', country: 'Kyrgyzstan', flag: '🇰🇬' },
+    { code: '+856', country: 'Laos', flag: '🇱🇦' },
+    { code: '+371', country: 'Latvia', flag: '🇱🇻' },
+    { code: '+961', country: 'Lebanon', flag: '🇱🇧' },
+    { code: '+266', country: 'Lesotho', flag: '🇱🇸' },
+    { code: '+231', country: 'Liberia', flag: '🇱🇷' },
+    { code: '+218', country: 'Libya', flag: '🇱🇾' },
+    { code: '+423', country: 'Liechtenstein', flag: '🇱🇮' },
+    { code: '+370', country: 'Lithuania', flag: '🇱🇹' },
+    { code: '+352', country: 'Luxembourg', flag: '🇱🇺' },
+    { code: '+853', country: 'Macau', flag: '🇲🇴' },
+    { code: '+389', country: 'Macedonia', flag: '🇲🇰' },
+    { code: '+261', country: 'Madagascar', flag: '🇲🇬' },
+    { code: '+265', country: 'Malawi', flag: '🇲🇼' },
+    { code: '+60', country: 'Malaysia', flag: '🇲🇾' },
+    { code: '+960', country: 'Maldives', flag: '🇲🇻' },
+    { code: '+223', country: 'Mali', flag: '🇲🇱' },
+    { code: '+356', country: 'Malta', flag: '🇲🇹' },
+    { code: '+692', country: 'Marshall Islands', flag: '🇲🇭' },
+    { code: '+596', country: 'Martinique', flag: '🇲🇶' },
+    { code: '+222', country: 'Mauritania', flag: '🇲🇷' },
+    { code: '+230', country: 'Mauritius', flag: '🇲🇺' },
+    { code: '+262', country: 'Mayotte', flag: '🇾🇹' },
+    { code: '+52', country: 'Mexico', flag: '🇲🇽' },
+    { code: '+691', country: 'Micronesia', flag: '🇫🇲' },
+    { code: '+373', country: 'Moldova', flag: '🇲🇩' },
+    { code: '+377', country: 'Monaco', flag: '🇲🇨' },
+    { code: '+976', country: 'Mongolia', flag: '🇲🇳' },
+    { code: '+1', country: 'Montserrat', flag: '🇲🇸' },
+    { code: '+212', country: 'Morocco', flag: '🇲🇦' },
+    { code: '+258', country: 'Mozambique', flag: '🇲🇿' },
+    { code: '+95', country: 'Myanmar', flag: '🇲🇲' },
+    { code: '+264', country: 'Namibia', flag: '🇳🇦' },
+    { code: '+674', country: 'Nauru', flag: '🇳🇷' },
+    { code: '+977', country: 'Nepal', flag: '🇳🇵' },
+    { code: '+31', country: 'Netherlands', flag: '🇳🇱' },
+    { code: '+599', country: 'Netherlands Antilles', flag: '🇦🇳' },
+    { code: '+687', country: 'New Caledonia', flag: '🇳🇨' },
+    { code: '+64', country: 'New Zealand', flag: '🇳🇿' },
+    { code: '+505', country: 'Nicaragua', flag: '🇳🇮' },
+    { code: '+227', country: 'Niger', flag: '🇳🇪' },
+    { code: '+234', country: 'Nigeria', flag: '🇳🇬' },
+    { code: '+683', country: 'Niue', flag: '🇳🇺' },
+    { code: '+672', country: 'Norfolk Island', flag: '🇳🇫' },
+    { code: '+850', country: 'North Korea', flag: '🇰🇵' },
+    { code: '+1', country: 'Northern Mariana Islands', flag: '🇲🇵' },
+    { code: '+47', country: 'Norway', flag: '🇳🇴' },
+    { code: '+968', country: 'Oman', flag: '🇴🇲' },
+    { code: '+92', country: 'Pakistan', flag: '🇵🇰' },
+    { code: '+680', country: 'Palau', flag: '🇵🇼' },
+    { code: '+970', country: 'Palestine', flag: '🇵🇸' },
+    { code: '+507', country: 'Panama', flag: '🇵🇦' },
+    { code: '+675', country: 'Papua New Guinea', flag: '🇵🇬' },
+    { code: '+595', country: 'Paraguay', flag: '🇵🇾' },
+    { code: '+51', country: 'Peru', flag: '🇵🇪' },
+    { code: '+63', country: 'Philippines', flag: '🇵🇭' },
+    { code: '+48', country: 'Poland', flag: '🇵🇱' },
+    { code: '+351', country: 'Portugal', flag: '🇵🇹' },
+    { code: '+1', country: 'Puerto Rico', flag: '🇵🇷' },
+    { code: '+974', country: 'Qatar', flag: '🇶🇦' },
+    { code: '+262', country: 'Réunion', flag: '🇷🇪' },
+    { code: '+40', country: 'Romania', flag: '🇷🇴' },
+    { code: '+7', country: 'Russia', flag: '🇷🇺' },
+    { code: '+250', country: 'Rwanda', flag: '🇷🇼' },
+    { code: '+290', country: 'Saint Helena', flag: '🇸🇭' },
+    { code: '+1', country: 'Saint Kitts and Nevis', flag: '🇰🇳' },
+    { code: '+1', country: 'Saint Lucia', flag: '🇱🇨' },
+    { code: '+508', country: 'Saint Pierre and Miquelon', flag: '🇵🇲' },
+    { code: '+1', country: 'Saint Vincent and the Grenadines', flag: '🇻🇨' },
+    { code: '+685', country: 'Samoa', flag: '🇼🇸' },
+    { code: '+378', country: 'San Marino', flag: '🇸🇲' },
+    { code: '+239', country: 'São Tomé and Príncipe', flag: '🇸🇹' },
+    { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
+    { code: '+221', country: 'Senegal', flag: '🇸🇳' },
+    { code: '+381', country: 'Serbia', flag: '🇷🇸' },
+    { code: '+248', country: 'Seychelles', flag: '🇸🇨' },
+    { code: '+232', country: 'Sierra Leone', flag: '🇸🇱' },
+    { code: '+65', country: 'Singapore', flag: '🇸🇬' },
+    { code: '+421', country: 'Slovakia', flag: '🇸🇰' },
+    { code: '+386', country: 'Slovenia', flag: '🇸🇮' },
+    { code: '+677', country: 'Solomon Islands', flag: '🇸🇧' },
+    { code: '+252', country: 'Somalia', flag: '🇸🇴' },
+    { code: '+27', country: 'South Africa', flag: '🇿🇦' },
+    { code: '+82', country: 'South Korea', flag: '🇰🇷' },
+    { code: '+34', country: 'Spain', flag: '🇪🇸' },
+    { code: '+94', country: 'Sri Lanka', flag: '🇱🇰' },
+    { code: '+249', country: 'Sudan', flag: '🇸🇩' },
+    { code: '+597', country: 'Suriname', flag: '🇸🇷' },
+    { code: '+268', country: 'Swaziland', flag: '🇸🇿' },
+    { code: '+46', country: 'Sweden', flag: '🇸🇪' },
+    { code: '+41', country: 'Switzerland', flag: '🇨🇭' },
+    { code: '+963', country: 'Syria', flag: '🇸🇾' },
+    { code: '+886', country: 'Taiwan', flag: '🇹🇼' },
+    { code: '+992', country: 'Tajikistan', flag: '🇹🇯' },
+    { code: '+255', country: 'Tanzania', flag: '🇹🇿' },
+    { code: '+66', country: 'Thailand', flag: '🇹🇭' },
+    { code: '+228', country: 'Togo', flag: '🇹🇬' },
+    { code: '+690', country: 'Tokelau', flag: '🇹🇰' },
+    { code: '+676', country: 'Tonga', flag: '🇹🇴' },
+    { code: '+1', country: 'Trinidad and Tobago', flag: '🇹🇹' },
+    { code: '+216', country: 'Tunisia', flag: '🇹🇳' },
+    { code: '+90', country: 'Turkey', flag: '🇹🇷' },
+    { code: '+993', country: 'Turkmenistan', flag: '🇹🇲' },
+    { code: '+1', country: 'Turks and Caicos Islands', flag: '🇹🇨' },
+    { code: '+688', country: 'Tuvalu', flag: '🇹🇻' },
+    { code: '+256', country: 'Uganda', flag: '🇺🇬' },
+    { code: '+380', country: 'Ukraine', flag: '🇺🇦' },
+    { code: '+971', country: 'United Arab Emirates', flag: '🇦🇪' },
+    { code: '+44', country: 'United Kingdom', flag: '🇬🇧' },
+    { code: '+1', country: 'United States', flag: '🇺🇸' },
+    { code: '+598', country: 'Uruguay', flag: '🇺🇾' },
+    { code: '+998', country: 'Uzbekistan', flag: '🇺🇿' },
+    { code: '+678', country: 'Vanuatu', flag: '🇻🇺' },
+    { code: '+58', country: 'Venezuela', flag: '🇻🇪' },
+    { code: '+84', country: 'Vietnam', flag: '🇻🇳' },
+    { code: '+1', country: 'Virgin Islands', flag: '🇻🇮' },
+    { code: '+681', country: 'Wallis and Futuna', flag: '🇼🇫' },
+    { code: '+212', country: 'Western Sahara', flag: '🇪🇭' },
+    { code: '+967', country: 'Yemen', flag: '🇾🇪' },
+    { code: '+260', country: 'Zambia', flag: '🇿🇲' },
+    { code: '+263', country: 'Zimbabwe', flag: '🇿🇼' }
+  ]
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleCheckboxChange = (field: string, checked: boolean) => {
+    setFormData(prev => ({ ...prev, [field]: checked }))
   }
 
   const handleFileUpload = (field: string, file: File | null) => {
@@ -93,7 +333,12 @@ const Apply = () => {
     if (step === 1) {
       const fields = c.personalInfo.fields
       fields.forEach(f => {
-        if (f.required && !String(formData[f.name as keyof typeof formData] || '').trim()) {
+        if (f.name === 'phoneCountry') {
+          // Validate both country and phone number
+          if (!formData.phoneCountry || !formData.phone.trim()) {
+            newErrors['phoneCountry'] = 'Required'
+          }
+        } else if (f.required && !String(formData[f.name as keyof typeof formData] || '').trim()) {
           newErrors[f.name] = 'Required'
         }
       })
@@ -101,7 +346,13 @@ const Apply = () => {
     if (step === 2) {
       const fields = c.businessInfo.fields
       fields.forEach(f => {
-        if (f.required) {
+        // Make business registration required only if checkbox is checked
+        if (f.name === 'businessRegistration') {
+          if (formData.hasBusinessNumber) {
+            const v = String(formData[f.name as keyof typeof formData] || '').trim()
+            if (!v) newErrors[f.name] = 'Required'
+          }
+        } else if (f.required) {
           const v = String(formData[f.name as keyof typeof formData] || '').trim()
           if (!v) newErrors[f.name] = 'Required'
         }
@@ -118,7 +369,14 @@ const Apply = () => {
     }
     if (step === 4) {
       (Object.keys(formData.documents) as Array<keyof typeof formData.documents>).forEach(k => {
-        if (!formData.documents[k]) newErrors[`doc_${String(k)}`] = 'Required'
+        // Make business registration document required only if checkbox is checked
+        if (k === 'businessRegistration') {
+          if (formData.hasBusinessNumber && !formData.documents[k]) {
+            newErrors[`doc_${String(k)}`] = 'Required'
+          }
+        } else if (!formData.documents[k]) {
+          newErrors[`doc_${String(k)}`] = 'Required'
+        }
       })
     }
     setErrors(newErrors)
@@ -163,8 +421,7 @@ const Apply = () => {
           { name: 'firstName', label: 'First Name', type: 'text', required: true },
           { name: 'lastName', label: 'Last Name', type: 'text', required: true },
           { name: 'email', label: 'Email Address', type: 'email', required: true },
-          { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
-          { name: 'nationalId', label: 'National ID Number', type: 'text', required: true }
+          { name: 'phoneCountry', label: 'Phone Number', type: 'phoneCountry', required: true }
         ]
       },
       
@@ -174,7 +431,8 @@ const Apply = () => {
         fields: [
           { name: 'businessName', label: 'Business Name', type: 'text', required: true },
           { name: 'businessType', label: 'Business Type', type: 'select', required: true, options: ['Retail', 'Wholesale', 'Manufacturing', 'Service', 'Other'] },
-          { name: 'businessRegistration', label: 'Business Registration Number', type: 'text', required: true },
+          { name: 'hasBusinessNumber', label: 'Do you have a Business Registration Number?', type: 'checkbox', required: false },
+          { name: 'businessRegistration', label: 'Business Registration Number', type: 'text', required: false },
           { name: 'businessAddress', label: 'Business Address', type: 'textarea', required: true },
           { name: 'businessDescription', label: 'Business Description', type: 'textarea', required: false }
         ]
@@ -195,7 +453,6 @@ const Apply = () => {
         title: 'Required Documents',
         subtitle: 'Upload the required documents',
         fields: [
-          { name: 'nationalId', label: 'National ID (Front & Back)', description: 'Clear photos of your national ID card' },
           { name: 'businessRegistration', label: 'Business Registration Certificate', description: 'Valid business license or registration' },
           { name: 'bankStatement', label: 'Bank Statement (Last 3 Months)', description: 'Business bank statements' },
           { name: 'proofOfAddress', label: 'Proof of Address', description: 'Utility bill or bank statement with your address' }
@@ -251,8 +508,7 @@ const Apply = () => {
           { name: 'firstName', label: 'Nama Pertama', type: 'text', required: true },
           { name: 'lastName', label: 'Nama Akhir', type: 'text', required: true },
           { name: 'email', label: 'Alamat E-mel', type: 'email', required: true },
-          { name: 'phone', label: 'Nombor Telefon', type: 'tel', required: true },
-          { name: 'nationalId', label: 'Nombor Kad Pengenalan', type: 'text', required: true }
+          { name: 'phoneCountry', label: 'Nombor Telefon', type: 'phoneCountry', required: true }
         ]
       },
       
@@ -262,7 +518,8 @@ const Apply = () => {
         fields: [
           { name: 'businessName', label: 'Nama Perniagaan', type: 'text', required: true },
           { name: 'businessType', label: 'Jenis Perniagaan', type: 'select', required: true, options: ['Peruncitan', 'Borong', 'Pembuatan', 'Perkhidmatan', 'Lain-lain'] },
-          { name: 'businessRegistration', label: 'Nombor Pendaftaran Perniagaan', type: 'text', required: true },
+          { name: 'hasBusinessNumber', label: 'Adakah anda mempunyai Nombor Pendaftaran Perniagaan?', type: 'checkbox', required: false },
+          { name: 'businessRegistration', label: 'Nombor Pendaftaran Perniagaan', type: 'text', required: false },
           { name: 'businessAddress', label: 'Alamat Perniagaan', type: 'textarea', required: true },
           { name: 'businessDescription', label: 'Penerangan Perniagaan', type: 'textarea', required: false }
         ]
@@ -283,7 +540,6 @@ const Apply = () => {
         title: 'Dokumen Diperlukan',
         subtitle: 'Muat naik dokumen yang diperlukan',
         fields: [
-          { name: 'nationalId', label: 'Kad Pengenalan (Depan & Belakang)', description: 'Foto jelas kad pengenalan anda' },
           { name: 'businessRegistration', label: 'Sijil Pendaftaran Perniagaan', description: 'Lesen perniagaan atau pendaftaran yang sah' },
           { name: 'bankStatement', label: 'Penyata Bank (3 Bulan Terakhir)', description: 'Penyata bank perniagaan' },
           { name: 'proofOfAddress', label: 'Bukti Alamat', description: 'Bil utiliti atau penyata bank dengan alamat anda' }
@@ -462,7 +718,34 @@ const Apply = () => {
                           <Label htmlFor={field.name} className="text-sm font-semibold">
                             {field.label} {field.required && <span className="text-primary">*</span>}
                           </Label>
-                          {field.type === 'textarea' ? (
+                          {field.type === 'phoneCountry' ? (
+                            <div className="mt-2 flex border border-input rounded-md bg-background">
+                              <div className="flex items-center px-3 py-2 border-r border-input">
+                                <span className="text-sm">
+                                  {countryCodes.find(c => c.code === formData.phoneCountry)?.flag || '🇧🇳'}
+                                </span>
+                                <select
+                                  value={formData.phoneCountry}
+                                  onChange={(e) => handleInputChange('phoneCountry', e.target.value)}
+                                  className="ml-2 bg-transparent border-none outline-none text-sm font-medium"
+                                >
+                                  {countryCodes.map((country) => (
+                                    <option key={country.code} value={country.code}>
+                                      {country.code}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <Input
+                                type="tel"
+                                placeholder={language === 'en' ? 'Enter phone number' : 'Masukkan nombor telefon'}
+                                value={formData.phone}
+                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                className="border-0 focus-visible:ring-0"
+                                required={true}
+                              />
+                            </div>
+                          ) : field.type === 'textarea' ? (
                             <Textarea
                               id={field.name}
                               value={formData[field.name as keyof typeof formData] as string}
@@ -470,6 +753,9 @@ const Apply = () => {
                               className="mt-2"
                               required={field.required}
                             />
+                          ) : field.name === 'phone' ? (
+                            // Skip phone field as it's handled in phoneCountry
+                            null
                           ) : (
                             <Input
                               id={field.name}
@@ -496,47 +782,67 @@ const Apply = () => {
                     <p className="text-muted-foreground mb-8">{c.businessInfo.subtitle}</p>
                     
                     <div className="space-y-6">
-                      {c.businessInfo.fields.map((field) => (
-                        <div key={field.name}>
-                          <Label htmlFor={field.name} className="text-sm font-semibold">
-                            {field.label} {field.required && <span className="text-primary">*</span>}
-                          </Label>
-                          {field.type === 'select' ? (
-                            <select
-                              id={field.name}
-                              value={formData[field.name as keyof typeof formData] as string}
-                              onChange={(e) => handleInputChange(field.name, e.target.value)}
-                              className="mt-2 w-full h-10 px-3 py-2 border border-input rounded-md bg-background"
-                              required={field.required}
-                            >
-                              <option value="">{language === 'en' ? 'Select an option' : 'Pilih pilihan'}</option>
-                              {field.options?.map((option) => (
-                                <option key={option} value={option}>{option}</option>
-                              ))}
-                            </select>
-                          ) : field.type === 'textarea' ? (
-                            <Textarea
-                              id={field.name}
-                              value={formData[field.name as keyof typeof formData] as string}
-                              onChange={(e) => handleInputChange(field.name, e.target.value)}
-                              className="mt-2"
-                              required={field.required}
-                            />
-                          ) : (
-                            <Input
-                              id={field.name}
-                              type={field.type}
-                              value={formData[field.name as keyof typeof formData] as string}
-                              onChange={(e) => handleInputChange(field.name, e.target.value)}
-                              className="mt-2"
-                              required={field.required}
-                            />
-                          )}
-                          {errors[field.name] && (
-                            <div className="text-sm text-red-600 mt-1">{language === 'en' ? 'This field is required' : 'Medan ini diperlukan'}</div>
-                          )}
-                        </div>
-                      ))}
+                      {c.businessInfo.fields.map((field) => {
+                        // Skip business registration fields if checkbox is not checked
+                        if (field.name === 'businessRegistration' && !formData.hasBusinessNumber) {
+                          return null
+                        }
+                        
+                        return (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name} className="text-sm font-semibold">
+                              {field.label} {(field.required || (field.name === 'businessRegistration' && formData.hasBusinessNumber)) && <span className="text-primary">*</span>}
+                            </Label>
+                            {field.type === 'checkbox' ? (
+                              <div className="mt-2">
+                                <label htmlFor={field.name} className="flex items-center gap-3 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    id={field.name}
+                                    checked={formData[field.name as keyof typeof formData] as boolean}
+                                    onChange={(e) => handleCheckboxChange(field.name, e.target.checked)}
+                                    className="w-5 h-5 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                                  />
+                                  <span className="text-base font-medium">{field.label}</span>
+                                </label>
+                              </div>
+                            ) : field.type === 'select' ? (
+                              <select
+                                id={field.name}
+                                value={formData[field.name as keyof typeof formData] as string}
+                                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                                className="mt-2 w-full h-10 px-3 py-2 border border-input rounded-md bg-background"
+                                required={field.required}
+                              >
+                                <option value="">{language === 'en' ? 'Select an option' : 'Pilih pilihan'}</option>
+                                {field.options?.map((option) => (
+                                  <option key={option} value={option}>{option}</option>
+                                ))}
+                              </select>
+                            ) : field.type === 'textarea' ? (
+                              <Textarea
+                                id={field.name}
+                                value={formData[field.name as keyof typeof formData] as string}
+                                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                                className="mt-2"
+                                required={field.required}
+                              />
+                            ) : (
+                              <Input
+                                id={field.name}
+                                type={field.type}
+                                value={formData[field.name as keyof typeof formData] as string}
+                                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                                className="mt-2"
+                                required={field.required}
+                              />
+                            )}
+                            {errors[field.name] && (
+                              <div className="text-sm text-red-600 mt-1">{language === 'en' ? 'This field is required' : 'Medan ini diperlukan'}</div>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 )}
@@ -623,43 +929,50 @@ const Apply = () => {
                     <p className="text-muted-foreground mb-8">{c.documents.subtitle}</p>
                     
                     <div className="space-y-8">
-                      {c.documents.fields.map((field) => (
-                        <div key={field.name}>
-                          <Label className="text-sm font-semibold">
-                            {field.label} <span className="text-primary">*</span>
-                          </Label>
-                          <p className="text-sm text-muted-foreground mb-4">{field.description}</p>
-                          
-                          <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
-                            <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                            <p className="text-muted-foreground mb-4">
-                              {language === 'en' ? 'Click to upload or drag and drop' : 'Klik untuk muat naik atau seret dan lepas'}
-                            </p>
-                            <input
-                              type="file"
-                              accept="image/*,.pdf"
-                              onChange={(e) => handleFileUpload(field.name, e.target.files?.[0] || null)}
-                              className="hidden"
-                              id={`file-${field.name}`}
-                            />
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={() => document.getElementById(`file-${field.name}`)?.click()}
-                            >
-                              {language === 'en' ? 'Choose File' : 'Pilih Fail'}
-                            </Button>
-                            {formData.documents[field.name as keyof typeof formData.documents] && (
-                              <p className="mt-2 text-sm text-primary">
-                                {formData.documents[field.name as keyof typeof formData.documents]?.name}
+                      {c.documents.fields.map((field) => {
+                        // Skip business registration document if checkbox is not checked
+                        if (field.name === 'businessRegistration' && !formData.hasBusinessNumber) {
+                          return null
+                        }
+                        
+                        return (
+                          <div key={field.name}>
+                            <Label className="text-sm font-semibold">
+                              {field.label} {(field.name === 'businessRegistration' && formData.hasBusinessNumber) || field.name !== 'businessRegistration' ? <span className="text-primary">*</span> : ''}
+                            </Label>
+                            <p className="text-sm text-muted-foreground mb-4">{field.description}</p>
+                            
+                            <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
+                              <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                              <p className="text-muted-foreground mb-4">
+                                {language === 'en' ? 'Click to upload or drag and drop' : 'Klik untuk muat naik atau seret dan lepas'}
                               </p>
-                            )}
-                            {!formData.documents[field.name as keyof typeof formData.documents] && errors[`doc_${field.name}`] && (
-                              <div className="text-sm text-red-600 mt-2">{language === 'en' ? 'This document is required' : 'Dokumen ini diperlukan'}</div>
-                            )}
+                              <input
+                                type="file"
+                                accept="image/*,.pdf"
+                                onChange={(e) => handleFileUpload(field.name, e.target.files?.[0] || null)}
+                                className="hidden"
+                                id={`file-${field.name}`}
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => document.getElementById(`file-${field.name}`)?.click()}
+                              >
+                                {language === 'en' ? 'Choose File' : 'Pilih Fail'}
+                              </Button>
+                              {formData.documents[field.name as keyof typeof formData.documents] && (
+                                <p className="mt-2 text-sm text-primary">
+                                  {formData.documents[field.name as keyof typeof formData.documents]?.name}
+                                </p>
+                              )}
+                              {!formData.documents[field.name as keyof typeof formData.documents] && errors[`doc_${field.name}`] && (
+                                <div className="text-sm text-red-600 mt-2">{language === 'en' ? 'This document is required' : 'Dokumen ini diperlukan'}</div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 )}

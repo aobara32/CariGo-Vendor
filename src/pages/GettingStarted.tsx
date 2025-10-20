@@ -149,13 +149,13 @@ const GettingStarted = () => {
             icon: Phone,
             title: 'Phone Support',
             description: 'Speak directly with our support team',
-            contact: '+673 212 3456'
+            contact: '+673 822 8250'
           },
           {
             icon: Calendar,
             title: 'Schedule a Call',
             description: 'Book a personalized onboarding session',
-            contact: 'Book online'
+            contact: 'Coming soon'
           }
         ]
       },
@@ -308,7 +308,7 @@ const GettingStarted = () => {
             icon: Phone,
             title: 'Sokongan Telefon',
             description: 'Bercakap terus dengan pasukan sokongan kami',
-            contact: '+673 212 3456'
+            contact: '+673 822 8250'
           },
           {
             icon: Calendar,
@@ -518,7 +518,7 @@ const GettingStarted = () => {
                       <Button variant="outline" className="w-full">{language === 'en' ? 'Send Email' : 'Hantar E-mel'}</Button>
                     </a>
                   ) : option.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
-                    <a href="tel:+6732123456" className="block">
+                    <a href="tel:+6738228250" className="block">
                       <Button variant="outline" className="w-full">{language === 'en' ? 'Call Now' : 'Panggil Sekarang'}</Button>
                     </a>
                   ) : (

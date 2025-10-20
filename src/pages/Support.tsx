@@ -75,7 +75,7 @@ const Support = () => {
             title: 'Phone Support',
             description: 'Speak directly with support',
             action: 'Call Now',
-            contact: '+673 212 3456'
+            contact: '+673 822 8250'
           },
           {
             icon: Mail,
@@ -90,35 +90,7 @@ const Support = () => {
       academy: {
         title: 'CariGo Academy',
         subtitle: 'Learn how to maximize your success',
-        categories: [
-          {
-            title: 'Getting Started',
-            description: 'Essential guides for new merchants',
-            courses: [
-              { title: 'Store Setup Guide', duration: '15 min', type: 'Guide' },
-              { title: 'Product Photography Tips', duration: '20 min', type: 'Video' },
-              { title: 'Pricing Strategies', duration: '25 min', type: 'Course' }
-            ]
-          },
-          {
-            title: 'Growing Your Business',
-            description: 'Advanced strategies for scaling',
-            courses: [
-              { title: 'Digital Marketing Basics', duration: '30 min', type: 'Course' },
-              { title: 'Customer Service Excellence', duration: '20 min', type: 'Guide' },
-              { title: 'Inventory Management', duration: '25 min', type: 'Video' }
-            ]
-          },
-          {
-            title: 'Technical Guides',
-            description: 'Platform features and tools',
-            courses: [
-              { title: 'API Integration Guide', duration: '45 min', type: 'Guide' },
-              { title: 'Analytics Deep Dive', duration: '30 min', type: 'Video' },
-              { title: 'CSV Import/Export', duration: '15 min', type: 'Tutorial' }
-            ]
-          }
-        ]
+        comingSoon: true
       },
       
       documentation: {
@@ -201,7 +173,7 @@ const Support = () => {
           {
             icon: Phone,
             title: 'Phone Support',
-            description: '+673 212 3456',
+            description: '+673 822 8250',
             hours: 'Monday-Friday, 9AM-6PM'
           },
           {
@@ -248,7 +220,7 @@ const Support = () => {
             title: 'Sokongan Telefon',
             description: 'Bercakap terus dengan sokongan',
             action: 'Panggil Sekarang',
-            contact: '+673 212 3456'
+            contact: '+673 822 8250'
           },
           {
             icon: Mail,
@@ -263,35 +235,7 @@ const Support = () => {
       academy: {
         title: 'Akademi CariGo',
         subtitle: 'Pelajari cara memaksimumkan kejayaan anda',
-        categories: [
-          {
-            title: 'Bermula',
-            description: 'Panduan penting untuk pedagang baru',
-            courses: [
-              { title: 'Panduan Persediaan Kedai', duration: '15 min', type: 'Panduan' },
-              { title: 'Petua Fotografi Produk', duration: '20 min', type: 'Video' },
-              { title: 'Strategi Harga', duration: '25 min', type: 'Kursus' }
-            ]
-          },
-          {
-            title: 'Mengembangkan Perniagaan',
-            description: 'Strategi lanjutan untuk pembangunan',
-            courses: [
-              { title: 'Asas Pemasaran Digital', duration: '30 min', type: 'Kursus' },
-              { title: 'Kecemerlangan Perkhidmatan Pelanggan', duration: '20 min', type: 'Panduan' },
-              { title: 'Pengurusan Inventori', duration: '25 min', type: 'Video' }
-            ]
-          },
-          {
-            title: 'Panduan Teknikal',
-            description: 'Ciri dan alatan platform',
-            courses: [
-              { title: 'Panduan Integrasi API', duration: '45 min', type: 'Panduan' },
-              { title: 'Analitik Mendalam', duration: '30 min', type: 'Video' },
-              { title: 'Import/Eksport CSV', duration: '15 min', type: 'Tutorial' }
-            ]
-          }
-        ]
+        comingSoon: true
       },
       
       documentation: {
@@ -375,7 +319,7 @@ const Support = () => {
           {
             icon: Phone,
             title: 'Sokongan Telefon',
-            description: '+673 212 3456',
+            description: '+673 822 8250',
             hours: 'Isnin-Jumaat, 9AM-6PM'
           },
           {
@@ -396,6 +340,29 @@ const Support = () => {
   }
 
   const c = content[language]
+
+  const getManualPath = (label: string): string | undefined => {
+    // English
+    if (label === 'Store Management' || label === 'Pengurusan Kedai') return '/manual/store-management'
+    if (label === 'Product Catalog' || label === 'Katalog Produk') return '/manual/product-catalog'
+    if (label === 'Order Processing' || label === 'Pemprosesan Pesanan') return '/manual/order-processing'
+    if (label === 'Customer Management' || label === 'Pengurusan Pelanggan') return '/manual/customer-management'
+    if (label === 'Analytics & Reporting' || label === 'Analitik & Laporan') return '/manual/analytics-reporting'
+
+    if (label === 'Getting Started' || label === 'Bermula') return '/manual/getting-started'
+    if (label === 'Authentication' || label === 'Pengesahan') return '/manual/authentication'
+    if (label === 'Product API' || label === 'API Produk') return '/manual/product-api'
+    if (label === 'Order API' || label === 'API Pesanan') return '/manual/order-api'
+    if (label === 'Webhooks' || label === 'Webhook') return '/manual/webhooks'
+
+    if (label === 'Seller Agreement' || label === 'Perjanjian Penjual') return '/manual/seller-agreement'
+    if (label === 'Product Guidelines' || label === 'Garis Panduan Produk') return '/manual/product-guidelines'
+    if (label === 'Shipping Policies' || label === 'Dasar Penghantaran') return '/manual/shipping-policies'
+    if (label === 'Return Policies' || label === 'Dasar Pemulangan') return '/manual/return-policies'
+
+    // No page for Platform Guidelines yet
+    return undefined
+  }
 
   return (
     <MerchantLayout>
@@ -443,7 +410,7 @@ const Support = () => {
                       </Button>
                     </Link>
                   ) : option.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
-                    <a href="tel:+6732123456" className="block">
+                    <a href="tel:+6738228250" className="block">
                       <Button variant="outline" className="w-full">
                         {option.action}
                       </Button>
@@ -466,40 +433,18 @@ const Support = () => {
         </div>
       </section>
 
-      {/* CariGo Academy */}
+      {/* CariGo Academy - Coming Soon */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">{c.academy.title}</h2>
           <p className="text-center text-muted-foreground mb-16 text-lg">{c.academy.subtitle}</p>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {c.academy.categories.map((category, index) => (
-              <Card key={index} className="p-8 hover:shadow-xl transition-shadow">
-                <div className="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
-                  <GraduationCap className="w-8 h-8 text-secondary" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">{category.title}</h3>
-                <p className="text-muted-foreground mb-6">{category.description}</p>
-                
-                <div className="space-y-3">
-                  {category.courses.map((course, courseIndex) => (
-                    <div key={courseIndex} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <PlayCircle className="w-5 h-5 text-secondary" />
-                        <span className="font-medium">{course.title}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        <span>{course.duration}</span>
-                        <span className="bg-secondary/10 text-secondary px-2 py-1 rounded text-xs">
-                          {course.type}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
+          <div className="max-w-3xl mx-auto">
+            <Card className="p-10 text-center">
+              <div className="text-2xl font-bold mb-2">{language === 'en' ? 'Coming Soon' : 'Akan Datang'}</div>
+              <p className="text-muted-foreground">
+                {language === 'en' ? 'We are preparing training content and resources.' : 'Kami sedang menyediakan kandungan latihan dan sumber.'}
+              </p>
+            </Card>
           </div>
         </div>
       </section>
@@ -521,12 +466,24 @@ const Support = () => {
                   <h3 className="text-2xl font-bold mb-6">{section.title}</h3>
                   
                   <div className="space-y-3">
-                    {section.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex items-center gap-3 hover:text-primary transition-colors cursor-pointer">
-                        <ChevronRight className="w-4 h-4" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
+                    {section.items.map((item, itemIndex) => {
+                      const path = getManualPath(item)
+                      const content = (
+                        <>
+                          <ChevronRight className="w-4 h-4" />
+                          <span>{item}</span>
+                        </>
+                      )
+                      return path ? (
+                        <Link key={itemIndex} to={path} className="flex items-center gap-3 hover:text-primary transition-colors">
+                          {content}
+                        </Link>
+                      ) : (
+                        <div key={itemIndex} className="flex items-center gap-3 text-muted-foreground">
+                          {content}
+                        </div>
+                      )
+                    })}
                   </div>
                   
                   <Button variant="outline" className="w-full mt-6">
@@ -590,7 +547,7 @@ const Support = () => {
                   <p className="text-lg font-semibold text-primary mb-2">{method.description}</p>
                   <p className="text-muted-foreground mb-4">{method.response || method.hours}</p>
                   {method.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
-                    <a href="tel:+6732123456" className="block">
+                    <a href="tel:+6738228250" className="block">
                       <Button variant="outline" className="w-full">
                         {language === 'en' ? 'Call Now' : 'Panggil Sekarang'}
                       </Button>
@@ -601,7 +558,7 @@ const Support = () => {
                         {language === 'en' ? 'Send Email' : 'Hantar E-mel'}
                       </Button>
                     </a>
-                  ) : (
+                  ) : ( 
                     <Button variant="outline" className="w-full" disabled>
                       {language === 'en' ? 'Coming Soon' : 'Akan Datang'}
                     </Button>

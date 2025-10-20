@@ -1,642 +1,327 @@
-import React, { useState } from 'react'
+import React from 'react'
 import MerchantLayout from '../layouts/MerchantLayout'
 import { Card } from '../components/ui/card'
-import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
-import { Link } from 'react-router-dom'
-import { 
-  Search,
-  BookOpen,
-  Video,
-  FileText,
-  MessageSquare,
-  Phone,
-  Mail,
-  ArrowRight,
-  ChevronDown,
-  ChevronUp,
-  ChevronRight,
-  HelpCircle,
-  Lightbulb,
-  Settings,
-  CreditCard,
-  Package,
-  BarChart3,
-  Shield
-} from 'lucide-react'
+import { Button } from '../components/ui/button'
+import { Search } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
+import { Link } from 'react-router-dom'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../components/ui/accordion'
 
 const HelpCenter = () => {
   const { language } = useLanguage()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-
-  const normalize = (s: string) => s.toLowerCase()
 
   const content = {
     en: {
-      hero: {
-        title: 'Help Center',
-        subtitle: 'Find answers to your questions and get the support you need',
-        searchPlaceholder: 'Search for help articles, guides, and FAQs...'
-      },
-      categories: [
-        {
-          id: 'getting-started',
-          title: 'Getting Started',
-          icon: BookOpen,
-          description: 'Learn the basics of CariGo',
-          articles: [
-            'How to create your merchant account',
-            'Setting up your first product',
-            'Understanding CariGo fees',
-            'Verification process explained',
-            'Dashboard overview'
-          ]
-        },
-        {
-          id: 'products',
-          title: 'Product Management',
-          icon: Package,
-          description: 'Manage your inventory and listings',
-          articles: [
-            'Adding products to your store',
-            'Bulk product upload with CSV',
-            'Product categories and tags',
-            'Managing product variants',
-            'Product image guidelines'
-          ]
-        },
-        {
-          id: 'orders',
-          title: 'Orders & Fulfillment',
-          icon: CreditCard,
-          description: 'Handle orders and shipping',
-          articles: [
-            'Processing orders',
-            'Shipping and delivery options',
-            'Order status management',
-            'Handling returns and refunds',
-            'Customer communication'
-          ]
-        },
-        {
-          id: 'analytics',
-          title: 'Analytics & Reports',
-          icon: BarChart3,
-          description: 'Track your business performance',
-          articles: [
-            'Understanding your dashboard',
-            'Sales reports and insights',
-            'Customer analytics',
-            'Performance metrics',
-            'Exporting data'
-          ]
-        },
-        {
-          id: 'payments',
-          title: 'Payments & Payouts',
-          icon: CreditCard,
-          description: 'Manage your finances',
-          articles: [
-            'Payment processing setup',
-            'Payout schedules',
-            'Fee structure explained',
-            'Tax reporting',
-            'Financial statements'
-          ]
-        },
-        {
-          id: 'account',
-          title: 'Account Settings',
-          icon: Settings,
-          description: 'Manage your account',
-          articles: [
-            'Updating business information',
-            'Changing password and security',
-            'Notification preferences',
-            'Account verification',
-            'Closing your account'
-          ]
-        }
-      ],
-      documentation: {
-        title: 'Documentation',
-        subtitle: 'Comprehensive guides and references',
-        sections: [
-          {
-            title: 'Platform Guides',
-            icon: BookOpen,
-            items: [
-              'Store Management',
-              'Product Catalog',
-              'Order Processing',
-              'Customer Management',
-              'Analytics & Reporting'
-            ]
-          },
-          {
-            title: 'API Documentation',
-            icon: Settings,
-            items: [
-              'Getting Started',
-              'Authentication',
-              'Product API',
-              'Order API',
-              'Webhooks'
-            ]
-          },
-          {
-            title: 'Policies & Guidelines',
-            icon: Shield,
-            items: [
-              'Seller Agreement',
-              'Product Guidelines',
-              'Shipping Policies',
-              'Return Policies'
-            ]
-          }
-        ]
-      },
-      quickActions: [
-        {
-          title: 'Video Tutorials',
-          description: 'Step-by-step video guides',
-          icon: Video,
-          action: 'Watch Videos',
-          color: 'bg-blue-500'
-        },
-        {
-          title: 'Documentation',
-          description: 'Comprehensive guides and API docs',
-          icon: FileText,
-          action: 'Read Docs',
-          color: 'bg-green-500'
-        },
-        {
-          title: 'Contact Support',
-          description: 'Get help from our team',
-          icon: MessageSquare,
-          action: 'Contact Us',
-          color: 'bg-orange-500'
-        }
-      ],
-      faqs: [
-        {
-          question: 'How do I get started as a new merchant?',
-          answer: 'Simply apply through our application form, complete the verification process, and start adding your products. The entire process typically takes 3-5 days.'
-        },
-        {
-          question: 'What are CariGo\'s fees?',
-          answer: 'CariGo charges a commission on sales (varies by plan), payment processing fees, and optional monthly subscription fees. See our pricing page for detailed information.'
-        },
-        {
-          question: 'How do I receive payments?',
-          answer: 'Payments are automatically processed and transferred to your bank account according to your payout schedule (weekly or monthly).'
-        },
-        {
-          question: 'Can I sell internationally?',
-          answer: 'Currently, CariGo focuses on the Brunei market. International expansion is planned for future updates.'
-        }
-      ],
-      contact: {
-        title: 'Still Need Help?',
-        subtitle: 'Our support team is here to assist you',
-        methods: [
-          {
-            icon: MessageSquare,
-            title: 'Live Chat',
-            description: 'Available 9AM-6PM',
-            action: 'Coming Soon',
-            available: true
-          },
-          {
-            icon: Phone,
-            title: 'Phone Support',
-            description: '+673 212 3456',
-            action: 'Call Now',
-            available: true
-          },
-          {
-            icon: Mail,
-            title: 'Email Support',
-            description: 'carigobn@gmail.com',
-            action: 'Send Email',
-            available: true
-          }
-        ]
-      }
+      title: 'Help Center',
+      subtitle: 'Search guides, FAQs, and troubleshooting tips',
+      placeholder: 'Search the help center...',
+      popular: 'Popular Topics',
+      topics: ['Getting Started', 'Account & Billing', 'Orders & Shipping', 'Products & Catalog', 'Policies & Guidelines'],
     },
     ms: {
-      hero: {
-        title: 'Pusat Bantuan',
-        subtitle: 'Cari jawapan kepada soalan anda dan dapatkan sokongan yang anda perlukan',
-        searchPlaceholder: 'Cari artikel bantuan, panduan, dan FAQ...'
-      },
-      categories: [
-        {
-          id: 'getting-started',
-          title: 'Bermula',
-          icon: BookOpen,
-          description: 'Pelajari asas-asas CariGo',
-          articles: [
-            'Cara membuat akaun pedagang anda',
-            'Menyediakan produk pertama anda',
-            'Memahami yuran CariGo',
-            'Proses pengesahan dijelaskan',
-            'Gambaran keseluruhan papan pemuka'
-          ]
-        },
-        {
-          id: 'products',
-          title: 'Pengurusan Produk',
-          icon: Package,
-          description: 'Urus inventori dan senarai anda',
-          articles: [
-            'Menambah produk ke kedai anda',
-            'Muat naik produk pukal dengan CSV',
-            'Kategori dan tag produk',
-            'Mengurus variasi produk',
-            'Garis panduan imej produk'
-          ]
-        },
-        {
-          id: 'orders',
-          title: 'Pesanan & Pemenuhan',
-          icon: CreditCard,
-          description: 'Urus pesanan dan penghantaran',
-          articles: [
-            'Memproses pesanan',
-            'Pilihan penghantaran dan penghantaran',
-            'Pengurusan status pesanan',
-            'Menguruskan pulangan dan bayaran balik',
-            'Komunikasi pelanggan'
-          ]
-        },
-        {
-          id: 'analytics',
-          title: 'Analitik & Laporan',
-          icon: BarChart3,
-          description: 'Trak prestasi perniagaan anda',
-          articles: [
-            'Memahami papan pemuka anda',
-            'Laporan dan pandangan jualan',
-            'Analitik pelanggan',
-            'Metrik prestasi',
-            'Mengeksport data'
-          ]
-        },
-        {
-          id: 'payments',
-          title: 'Pembayaran & Pembayaran',
-          icon: CreditCard,
-          description: 'Urus kewangan anda',
-          articles: [
-            'Penyediaan pemprosesan pembayaran',
-            'Jadual pembayaran',
-            'Struktur yuran dijelaskan',
-            'Pelaporan cukai',
-            'Penyata kewangan'
-          ]
-        },
-        {
-          id: 'account',
-          title: 'Tetapan Akaun',
-          icon: Settings,
-          description: 'Urus akaun anda',
-          articles: [
-            'Mengemas kini maklumat perniagaan',
-            'Menukar kata laluan dan keselamatan',
-            'Keutamaan pemberitahuan',
-            'Pengesahan akaun',
-            'Menutup akaun anda'
-          ]
-        }
-      ],
-      documentation: {
-        title: 'Dokumentasi',
-        subtitle: 'Panduan dan rujukan komprehensif',
-        sections: [
-          {
-            title: 'Panduan Platform',
-            icon: BookOpen,
-            items: [
-              'Pengurusan Kedai',
-              'Katalog Produk',
-              'Pemprosesan Pesanan',
-              'Pengurusan Pelanggan',
-              'Analitik & Laporan'
-            ]
-          },
-          {
-            title: 'Dokumentasi API',
-            icon: Settings,
-            items: [
-              'Bermula',
-              'Pengesahan',
-              'API Produk',
-              'API Pesanan',
-              'Webhooks'
-            ]
-          },
-          {
-            title: 'Dasar & Garis Panduan',
-            icon: Shield,
-            items: [
-              'Perjanjian Penjual',
-              'Garis Panduan Produk',
-              'Dasar Penghantaran',
-              'Dasar Pulangan'
-            ]
-          }
-        ]
-      },
-      quickActions: [
-        {
-          title: 'Tutorial Video',
-          description: 'Panduan video langkah demi langkah',
-          icon: Video,
-          action: 'Tonton Video',
-          color: 'bg-blue-500'
-        },
-        {
-          title: 'Dokumentasi',
-          description: 'Panduan komprehensif dan dokumen API',
-          icon: FileText,
-          action: 'Baca Dokumen',
-          color: 'bg-green-500'
-        },
-        {
-          title: 'Hubungi Sokongan',
-          description: 'Dapatkan bantuan dari pasukan kami',
-          icon: MessageSquare,
-          action: 'Hubungi Kami',
-          color: 'bg-orange-500'
-        }
-      ],
-      faqs: [
-        {
-          question: 'Bagaimana saya boleh bermula sebagai pedagang baru?',
-          answer: 'Hanya mohon melalui borang permohonan kami, lengkapkan proses pengesahan, dan mula menambah produk anda. Seluruh proses biasanya mengambil masa 3-5 hari.'
-        },
-        {
-          question: 'Apakah yuran CariGo?',
-          answer: 'CariGo mengenakan komisen pada jualan (berbeza mengikut pelan), yuran pemprosesan pembayaran, dan yuran langganan bulanan pilihan. Lihat halaman harga kami untuk maklumat terperinci.'
-        },
-        {
-          question: 'Bagaimana saya menerima pembayaran?',
-          answer: 'Pembayaran diproses secara automatik dan dipindahkan ke akaun bank anda mengikut jadual pembayaran anda (mingguan atau bulanan).'
-        },
-        {
-          question: 'Bolehkah saya menjual secara antarabangsa?',
-          answer: 'Pada masa ini, CariGo memberi tumpuan kepada pasaran Brunei. Pengembangan antarabangsa dirancang untuk kemas kini masa depan.'
-        }
-      ],
-      contact: {
-        title: 'Masih Perlu Bantuan?',
-        subtitle: 'Pasukan sokongan kami di sini untuk membantu anda',
-        methods: [
-          {
-            icon: MessageSquare,
-            title: 'Chat Langsung',
-            description: 'Tersedia 9AM-6PM',
-            action: 'Akan Datang',
-            available: true
-          },
-          {
-            icon: Phone,
-            title: 'Sokongan Telefon',
-            description: '+673 212 3456',
-            action: 'Panggil Sekarang',
-            available: true
-          },
-          {
-            icon: Mail,
-            title: 'Sokongan E-mel',
-            description: 'carigobn@gmail.com',
-            action: 'Hantar E-mel',
-            available: true
-          }
-        ]
-      }
-    }
-  }
+      title: 'Pusat Bantuan',
+      subtitle: 'Cari panduan, FAQ, dan tip penyelesaian masalah',
+      placeholder: 'Cari di pusat bantuan...',
+      popular: 'Topik Popular',
+      topics: ['Bermula', 'Akaun & Bil', 'Pesanan & Penghantaran', 'Produk & Katalog', 'Dasar & Garis Panduan'],
+    },
+  } as const
 
   const c = content[language]
 
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategory(expandedCategory === categoryId ? null : categoryId)
+  const getManualPathBySection = (sectionTitle: string): string | undefined => {
+    if (sectionTitle === 'Store Management') return '/manual/store-management'
+    if (sectionTitle === 'Product Catalog') return '/manual/product-catalog'
+    if (sectionTitle === 'Order Processing') return '/manual/order-processing'
+    if (sectionTitle === 'Customer Management') return '/manual/customer-management'
+    if (sectionTitle === 'Analytics & Reporting') return '/manual/analytics-reporting'
+    if (sectionTitle === 'Getting Started') return '/manual/getting-started'
+    if (sectionTitle === 'Authentication') return '/manual/authentication'
+    if (sectionTitle === 'Product API') return '/manual/product-api'
+    if (sectionTitle === 'Order API') return '/manual/order-api'
+    if (sectionTitle === 'Webhooks') return '/manual/webhooks'
+    if (sectionTitle === 'Seller Agreement') return '/manual/seller-agreement'
+    if (sectionTitle === 'Product Guidelines') return '/manual/product-guidelines'
+    if (sectionTitle === 'Shipping Policies') return '/manual/shipping-policies'
+    if (sectionTitle === 'Return Policies') return '/manual/return-policies'
+    return undefined
+  }
+
+  const getManualPathByKeyword = (keyword: string): string | undefined => {
+    // Getting Started
+    if (keyword === 'How to create your merchant account') return '/manual/getting-started'
+    if (keyword === 'Verification process explained') return '/manual/getting-started'
+    if (keyword === 'Dashboard overview') return '/manual/getting-started'
+
+    // Product Catalog
+    if (keyword === 'Setting up your first product') return '/manual/product-catalog'
+    if (keyword === 'Adding products to your store') return '/manual/product-catalog'
+    if (keyword === 'Bulk product upload with CSV') return '/manual/product-catalog'
+    if (keyword === 'Product categories and tags') return '/manual/product-catalog'
+    if (keyword === 'Managing product variants') return '/manual/product-catalog'
+    if (keyword === 'Product image guidelines') return '/manual/product-guidelines'
+
+    // Order Processing
+    if (keyword === 'Processing orders') return '/manual/order-processing'
+    if (keyword === 'Shipping and delivery options') return '/manual/order-processing'
+    if (keyword === 'Order status management') return '/manual/order-processing'
+    if (keyword === 'Handling returns and refunds') return '/manual/return-policies'
+
+    // Customer Management
+    if (keyword === 'Customer communication') return '/manual/customer-management'
+
+    // Analytics & Reporting
+    if (keyword === 'Understanding your dashboard') return '/manual/analytics-reporting'
+    if (keyword === 'Sales reports and insights') return '/manual/analytics-reporting'
+    if (keyword === 'Customer analytics') return '/manual/analytics-reporting'
+    if (keyword === 'Performance metrics') return '/manual/analytics-reporting'
+    if (keyword === 'Exporting data') return '/manual/analytics-reporting'
+
+    // Authentication / Account
+    if (keyword === 'Changing password and security') return '/manual/authentication'
+    if (keyword === 'Account verification') return '/manual/authentication'
+    if (keyword === 'Updating business information') return '/manual/store-management'
+    if (keyword === 'Notification preferences') return '/manual/webhooks'
+    if (keyword === 'Closing your account') return '/manual/authentication'
+
+    // Payments & Policies
+    if (keyword === 'Payment processing setup') return '/manual/seller-agreement'
+    if (keyword === 'Payout schedules') return '/manual/seller-agreement'
+    if (keyword === 'Fee structure explained') return '/manual/seller-agreement'
+    if (keyword === 'Tax reporting') return '/manual/seller-agreement'
+    if (keyword === 'Financial statements') return '/manual/seller-agreement'
+
+    return undefined
+  }
+
+  const getEmojiForKeyword = (keyword: string): string => {
+    if (keyword.includes('merchant account')) return '👤'
+    if (keyword.includes('Verification')) return '✅'
+    if (keyword.includes('Dashboard')) return '📊'
+    if (keyword.includes('Setting up your first product')) return '🛒'
+    if (keyword.includes('Adding products')) return '➕'
+    if (keyword.includes('Bulk product upload') || keyword.includes('CSV')) return '📄'
+    if (keyword.includes('categories and tags')) return '🏷️'
+    if (keyword.includes('variants')) return '🧩'
+    if (keyword.includes('image')) return '🖼️'
+    if (keyword.includes('Processing orders')) return '🧾'
+    if (keyword.includes('Shipping')) return '🚚'
+    if (keyword.includes('Order status')) return '⌛'
+    if (keyword.includes('returns and refunds')) return '↩️'
+    if (keyword.includes('communication')) return '✉️'
+    if (keyword.includes('Sales')) return '💹'
+    if (keyword.includes('analytics')) return '📈'
+    if (keyword.includes('Performance')) return '🚀'
+    if (keyword.includes('Exporting')) return '⬇️'
+    if (keyword.includes('password') || keyword.includes('security')) return '🔒'
+    if (keyword.includes('Notification')) return '🔔'
+    if (keyword.includes('Closing your account')) return '🗝️'
+    if (keyword.includes('Payment')) return '💳'
+    if (keyword.includes('Payout')) return '💸'
+    if (keyword.includes('Fee')) return '💲'
+    if (keyword.includes('Tax')) return '🧾'
+    if (keyword.includes('Financial')) return '📑'
+    return '🔹'
   }
 
   return (
     <MerchantLayout>
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary via-primary to-primary/90 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">{c.hero.title}</h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/90">{c.hero.subtitle}</p>
-            
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <Input
-                    type="text"
-                    placeholder={c.hero.searchPlaceholder}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-4 py-4 text-lg bg-white/10 backdrop-blur border-white/20 text-white placeholder:text-white/70 focus:bg-white/20"
-                  />
-                </form>
-              </div>
+      <section className="relative py-16 bg-muted/30">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{c.title}</h1>
+          <p className="text-muted-foreground mb-8 text-lg">{c.subtitle}</p>
+
+          <Card className="p-4">
+            <div className="flex items-center gap-3">
+              <Search className="w-5 h-5 text-muted-foreground" />
+              <Input placeholder={c.placeholder} className="flex-1" />
+              <Button variant="outline">{language === 'en' ? 'Search' : 'Cari'}</Button>
             </div>
-          </div>
+          </Card>
         </div>
       </section>
 
-      {/* Quick Actions */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {c.quickActions.map((action, index) => {
-              const Icon = action.icon;
-              return (
-                <Card key={index} className="p-6 text-center hover:shadow-xl transition-shadow cursor-pointer group">
-                  <div className={`w-16 h-16 rounded-full ${action.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{action.title}</h3>
-                  <p className="text-muted-foreground mb-4">{action.description}</p>
-                  {action.title === (language === 'en' ? 'Contact Support' : 'Hubungi Sokongan') ? (
-                    <Link to="/support">
-                      <Button variant="outline" className="w-full">
-                        {action.action}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button variant="outline" className="w-full">
-                      {action.action}
-                    </Button>
-                  )}
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16">
-            {language === 'en' ? 'Browse by Category' : 'Layari mengikut Kategori'}
-          </h2>
-          
-          <div className="max-w-4xl mx-auto space-y-4">
-            {c.categories
-              .map((category) => ({
-                ...category,
-                articles: category.articles.filter(a => normalize(a).includes(normalize(searchQuery)))
-              }))
-              .filter(category => 
-                normalize(category.title).includes(normalize(searchQuery)) ||
-                normalize(category.description).includes(normalize(searchQuery)) ||
-                category.articles.length > 0 ||
-                searchQuery.trim() === ''
-              )
-              .map((category) => {
-              const Icon = category.icon;
-              const isExpanded = expandedCategory === category.id;
-              
-              return (
-                <Card key={category.id} className="overflow-hidden">
-                  <div 
-                    className="p-6 cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => toggleCategory(category.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Icon className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold">{category.title}</h3>
-                          <p className="text-muted-foreground">{category.description}</p>
-                        </div>
-                      </div>
-                      {isExpanded ? (
-                        <ChevronUp className="w-6 h-6 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="w-6 h-6 text-muted-foreground" />
-                      )}
-                    </div>
-                  </div>
-                  
-                  {isExpanded && (
-                    <div className="border-t bg-muted/20 p-6">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        {category.articles.map((article, index) => (
-                          <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white transition-colors cursor-pointer">
-                            <HelpCircle className="w-5 h-5 text-primary" />
-                            <span className="text-sm">{article}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Documentation */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4">{c.documentation.title}</h2>
-          <p className="text-center text-muted-foreground mb-16 text-lg">{c.documentation.subtitle}</p>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {c.documentation.sections.map((section, index) => {
-              const Icon = section.icon;
-              return (
-                <Card key={index} className="p-8 hover:shadow-xl transition-shadow">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                    <Icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-6">{section.title}</h3>
-                  
-                  <div className="space-y-3">
-                    {section.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex items-center gap-3 hover:text-primary transition-colors cursor-pointer">
-                        <ChevronRight className="w-4 h-4" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button variant="outline" className="w-full mt-6">
-                    {language === 'en' ? 'View All' : 'Lihat Semua'}
-                  </Button>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQs */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16">
-            {language === 'en' ? 'Frequently Asked Questions' : 'Soalan Lazim'}
-          </h2>
-          
-          <div className="max-w-4xl mx-auto space-y-6">
-            {c.faqs.map((faq, index) => (
-              <Card key={index} className="p-6">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-3">
-                  <Lightbulb className="w-6 h-6 text-secondary" />
-                  {faq.question}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
+      <section className="py-10">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-2xl font-bold mb-6">{c.popular}</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {c.topics.map((topic) => (
+              <Card key={topic} className="p-5 hover:shadow-md transition-shadow cursor-pointer text-left">
+                <div className="font-medium">{topic}</div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  {language === 'en' ? 'View articles' : 'Lihat artikel'}
+                </div>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Support */}
-      <section className="py-20 bg-gradient-to-br from-secondary via-secondary to-secondary/90 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">{c.contact.title}</h2>
-            <p className="text-xl md:text-2xl mb-16 text-white/90">{c.contact.subtitle}</p>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {c.contact.methods.map((method, index) => {
-                const Icon = method.icon;
-                return (
-                  <Card key={index} className="p-8 bg-white/10 backdrop-blur hover:bg-white/20 transition-colors">
-                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4 text-white">{method.title}</h3>
-                    <p className="text-white/80 mb-6">{method.description}</p>
-                    <Button 
-                      variant="outlineWhite" 
-                      className="w-full"
-                      disabled={true}
-                    >
-                      {method.action}
-                    </Button>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-3xl font-bold mb-6">{language === 'en' ? 'Browse by section' : 'Lihat mengikut seksyen'}</h2>
+
+          {/** Sections & Keywords Accordion */}
+          <Accordion type="multiple" className="w-full">
+            {[
+              {
+                title: 'Store Management',
+                keywords: [
+                  'Dashboard overview',
+                  'Customer communication',
+                  'Updating business information',
+                  'Notification preferences',
+                ],
+              },
+              {
+                title: 'Product Catalog',
+                keywords: [
+                  'Setting up your first product',
+                  'Adding products to your store',
+                  'Bulk product upload with CSV',
+                  'Product categories and tags',
+                  'Managing product variants',
+                  'Product image guidelines',
+                ],
+              },
+              {
+                title: 'Order Processing',
+                keywords: [
+                  'Processing orders',
+                  'Shipping and delivery options',
+                  'Order status management',
+                  'Handling returns and refunds',
+                ],
+              },
+              {
+                title: 'Customer Management',
+                keywords: [
+                  'Customer communication',
+                ],
+              },
+              {
+                title: 'Analytics & Reporting',
+                keywords: [
+                  'Understanding your dashboard',
+                  'Sales reports and insights',
+                  'Customer analytics',
+                  'Performance metrics',
+                  'Exporting data',
+                ],
+              },
+              {
+                title: 'Getting Started',
+                keywords: [
+                  'How to create your merchant account',
+                  'Verification process explained',
+                  'Dashboard overview',
+                ],
+              },
+              {
+                title: 'Authentication',
+                keywords: [
+                  'Changing password and security',
+                  'Account verification',
+                ],
+              },
+              {
+                title: 'Product API',
+                keywords: [
+                  'Bulk product upload with CSV',
+                ],
+              },
+              {
+                title: 'Order API',
+                keywords: [
+                  'Order status management',
+                ],
+              },
+              {
+                title: 'Webhooks',
+                keywords: [
+                  'Notification preferences',
+                ],
+              },
+              {
+                title: 'Seller Agreement',
+                keywords: [
+                  'Fee structure explained',
+                ],
+              },
+              {
+                title: 'Product Guidelines',
+                keywords: [
+                  'Product image guidelines',
+                ],
+              },
+              {
+                title: 'Shipping Policies',
+                keywords: [
+                  'Shipping and delivery options',
+                ],
+              },
+              {
+                title: 'Return Policies',
+                keywords: [
+                  'Handling returns and refunds',
+                ],
+              },
+              {
+                title: 'Payments & Finance',
+                keywords: [
+                  'Payment processing setup',
+                  'Payout schedules',
+                  'Fee structure explained',
+                  'Tax reporting',
+                  'Financial statements',
+                ],
+              },
+              {
+                title: 'Account',
+                keywords: [
+                  'Updating business information',
+                  'Changing password and security',
+                  'Notification preferences',
+                  'Account verification',
+                  'Closing your account',
+                ],
+              },
+            ].map((section) => {
+              const target = getManualPathBySection(section.title)
+              return (
+                <Card key={section.title} className="mb-3">
+                  <AccordionItem value={section.title}>
+                    <AccordionTrigger className="px-4">{section.title}</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid md:grid-cols-2 gap-2 px-4 pb-4">
+                        {section.keywords.map((kw) => {
+                          const kwPath = getManualPathByKeyword(kw) || target
+                          const emoji = getEmojiForKeyword(kw)
+                          return kwPath ? (
+                            <Link key={kw} to={kwPath} className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-2">
+                              <span>{emoji}</span>
+                              <span className="underline-offset-2 hover:underline">{kw}</span>
+                            </Link>
+                          ) : (
+                            <div key={kw} className="text-sm text-muted-foreground inline-flex items-center gap-2">
+                              <span>{emoji}</span>
+                              <span>{kw}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Card>
+              )
+            })}
+          </Accordion>
         </div>
       </section>
     </MerchantLayout>
@@ -644,3 +329,5 @@ const HelpCenter = () => {
 }
 
 export default HelpCenter
+
+

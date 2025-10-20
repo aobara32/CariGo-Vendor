@@ -461,32 +461,18 @@ const Features = ({ children }: { children?: React.ReactNode }) => {
         </div>
       </section>
 
-      {/* CariGo Academy */}
+      {/* CariGo Academy - Coming Soon */}
       <section className="py-20 bg-gradient-to-br from-secondary via-secondary to-secondary/90 text-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">{c.academy.title}</h2>
-              <p className="text-xl text-white/90">{c.academy.subtitle}</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {c.academy.courses.map((course, index) => (
-                <Card key={index} className="p-6 bg-white/10 backdrop-blur hover:bg-white/20 transition-colors">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-white">{course.title}</h3>
-                    <span className="bg-white/20 text-white px-2 py-1 rounded text-xs font-semibold">
-                      {course.level}
-                    </span>
-                  </div>
-                  <p className="text-white/80 mb-4">{course.description}</p>
-                  <div className="flex items-center gap-2 text-sm text-white/70">
-                    <Clock className="w-4 h-4" />
-                    <span>{course.duration}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">{c.academy.title}</h2>
+            <p className="text-xl text-white/90 mb-10">{c.academy.subtitle}</p>
+            <Card className="p-10 bg-white/10 backdrop-blur border-white/20 inline-block">
+              <div className="text-2xl font-bold text-white mb-2">{language === 'en' ? 'Coming Soon' : 'Akan Datang'}</div>
+              <p className="text-white/80 max-w-xl">
+                {language === 'en' ? 'We are preparing comprehensive learning materials for merchants.' : 'Kami sedang menyediakan bahan pembelajaran komprehensif untuk peniaga.'}
+              </p>
+            </Card>
           </div>
         </div>
       </section>
