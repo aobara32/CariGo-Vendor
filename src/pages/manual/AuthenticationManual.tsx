@@ -1,6 +1,6 @@
 import React from 'react'
 import ManualLayout from './ManualLayout'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 const AuthenticationManual = () => {
   const { language } = useLanguage()
