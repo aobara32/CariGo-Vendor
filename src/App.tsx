@@ -27,6 +27,8 @@ import ManualSellerAgreement from './pages/manual/SellerAgreementManual'
 import ManualProductGuidelines from './pages/manual/ProductGuidelinesManual'
 import ManualShippingPolicies from './pages/manual/ShippingPoliciesManual'
 import ManualReturnPolicies from './pages/manual/ReturnPoliciesManual'
+import ManualPaymentsPayouts from './pages/manual/PaymentsPayoutsManual'
+import ManualAccountSettings from './pages/manual/AccountSettingsManual'
 
 function App() {
   return (
@@ -58,6 +60,8 @@ function App() {
           <Route path="/manual/product-guidelines" element={<ManualProductGuidelines />} />
           <Route path="/manual/shipping-policies" element={<ManualShippingPolicies />} />
           <Route path="/manual/return-policies" element={<ManualReturnPolicies />} />
+          <Route path="/manual/payments-payouts" element={<ManualPaymentsPayouts />} />
+          <Route path="/manual/account-settings" element={<ManualAccountSettings />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

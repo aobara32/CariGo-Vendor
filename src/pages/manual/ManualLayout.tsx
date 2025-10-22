@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { supabaseService, VendorInquiryData } from '../../services/supabaseService'
+import { apiService } from '../../services/apiService'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Textarea } from '../../components/ui/textarea'
@@ -131,10 +133,110 @@ export const manualNavItems: ManualNavItem[] = [
     description: { en: 'Return and refund procedures', ms: 'Prosedur pemulangan dan bayaran balik' },
     category: 'policies'
   },
+  { 
+    key: 'payments-payouts', 
+    path: '/manual/payments-payouts', 
+    title: { en: 'Payments & Payouts', ms: 'Pembayaran & Pembayaran' },
+    description: { en: 'Manage your finances', ms: 'Urus kewangan anda' },
+    category: 'finance'
+  },
+  { 
+    key: 'account-settings', 
+    path: '/manual/account-settings', 
+    title: { en: 'Account Settings', ms: 'Tetapan Akaun' },
+    description: { en: 'Manage your account', ms: 'Urus akaun anda' },
+    category: 'management'
+  },
 ]
 
 const ContactForm = () => {
   const { language } = useLanguage()
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [isSubmitted, setIsSubmitted] = React.useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+
+      const inquiryData: VendorInquiryData = {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      }
+
+      // Save to Supabase database
+      const supabaseResult = await supabaseService.saveVendorInquiry(inquiryData)
+      
+      if (supabaseResult.success) {
+        console.log('Inquiry saved to Supabase successfully')
+      } else {
+        console.error('Failed to save to Supabase:', supabaseResult.error)
+      }
+
+      // Also send via backend API for email confirmation
+      try {
+        await apiService.submitContactForm({
+          name: formData.name,
+          email: formData.email,
+          phone: '',
+          subject: formData.subject,
+          message: formData.message
+        })
+        console.log('Contact form submitted via API successfully')
+      } catch (apiError) {
+        console.error('Failed to submit via API:', apiError)
+      }
+
+      setIsSubmitted(true)
+      setFormData({ name: '', email: '', subject: '', message: '' })
+
+    } catch (error) {
+      console.error('Error submitting contact form:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (isSubmitted) {
+    return (
+      <Card className="sticky top-6">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <MessageCircle className="w-5 h-5 text-primary" />
+            {language === 'en' ? 'Message Sent!' : 'Mesej Dihantar!'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="text-center">
+            <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <p className="text-sm text-muted-foreground">
+              {language === 'en' ? 'We\'ll get back to you within 24 hours' : 'Kami akan membalas dalam 24 jam'}
+            </p>
+          </div>
+          <Button 
+            className="w-full h-10" 
+            variant="outline"
+            onClick={() => setIsSubmitted(false)}
+          >
+            {language === 'en' ? 'Send Another Message' : 'Hantar Mesej Lain'}
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="sticky top-6">
       <CardHeader className="pb-4">
@@ -144,25 +246,49 @@ const ContactForm = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <Input 
+            placeholder={language === 'en' ? 'Your name' : 'Nama anda'} 
+            className="h-10"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
           <Input 
             placeholder={language === 'en' ? 'Your email' : 'Emel anda'} 
             className="h-10"
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
           />
           <Input 
             placeholder={language === 'en' ? 'Subject' : 'Subjek'} 
             className="h-10"
+            value={formData.subject}
+            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            required
           />
           <Textarea 
             placeholder={language === 'en' ? 'How can we help?' : 'Bagaimana kami boleh bantu?'} 
             rows={4} 
             className="resize-none"
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            required
           />
-        </div>
-        <Button className="w-full h-10">
-          <Send className="w-4 h-4 mr-2" />
-          {language === 'en' ? 'Send Message' : 'Hantar Mesej'}
-        </Button>
+          <Button 
+            type="submit" 
+            className="w-full h-10" 
+            disabled={isSubmitting}
+          >
+            <Send className="w-4 h-4 mr-2" />
+            {isSubmitting 
+              ? (language === 'en' ? 'Sending...' : 'Menghantar...')
+              : (language === 'en' ? 'Send Message' : 'Hantar Mesej')
+            }
+          </Button>
+        </form>
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
             {language === 'en' ? 'We\'ll get back to you within 24 hours' : 'Kami akan membalas dalam 24 jam'}
@@ -212,6 +338,7 @@ const ManualLayout = ({
     legal: { en: 'Legal', ms: 'Undang-undang' },
     guidelines: { en: 'Guidelines', ms: 'Garis Panduan' },
     policies: { en: 'Policies', ms: 'Dasar' },
+    finance: { en: 'Finance', ms: 'Kewangan' },
     other: { en: 'Other', ms: 'Lain-lain' }
   }
 

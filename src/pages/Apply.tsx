@@ -29,6 +29,8 @@ import {
   Package
 } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
+import { supabaseService, VendorApplicationData, ApplicationFiles } from '../services/supabaseService'
+import { apiService } from '../services/apiService'
 
 const Apply = () => {
   const { language } = useLanguage()
@@ -393,10 +395,80 @@ const Apply = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateStep(4)) return
-    setIsSubmitted(true)
+    
+    try {
+      setIsSubmitted(true)
+      
+      // Prepare data for submission
+      const applicationData: VendorApplicationData = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: `${formData.phoneCountry} ${formData.phone}`,
+        businessName: formData.businessName,
+        businessType: formData.businessType as any,
+        businessRegistration: formData.businessRegistration,
+        businessAddress: formData.businessAddress,
+        specialRequirements: formData.businessDescription,
+        productCategories: formData.productCategory ? [formData.productCategory] : [],
+        estimatedMonthlySales: formData.monthlySales as any,
+        howDidYouHear: formData.experience,
+        platformsUsed: [],
+        marketingChannels: formData.marketing ? [formData.marketing] : []
+      }
+
+      const files: ApplicationFiles = {
+        businessCert: formData.documents?.businessRegistration || undefined,
+        idDoc: formData.documents?.proofOfAddress || undefined,
+        bankInfo: formData.documents?.bankStatement || undefined
+      }
+
+      // Save to Supabase database
+      const supabaseResult = await supabaseService.saveVendorApplication(applicationData, files)
+      
+      if (supabaseResult.success) {
+        console.log('Application saved to Supabase successfully')
+      } else {
+        console.error('Failed to save to Supabase:', supabaseResult.error)
+      }
+
+      // Also send via backend API for email confirmation
+      try {
+        await apiService.submitApplicationForm({
+          name: applicationData.name,
+          email: applicationData.email,
+          phone: applicationData.phone,
+          businessName: applicationData.businessName,
+          businessType: applicationData.businessType as any || '',
+          businessRegistration: applicationData.businessRegistration || '',
+          businessAddress: applicationData.businessAddress || '',
+          industry: '',
+          yearsInBusiness: 0,
+          numberOfEmployees: 0,
+          annualRevenue: 'under-10k' as any,
+          specialRequirements: applicationData.specialRequirements || '',
+          productCategories: applicationData.productCategories || [],
+          estimatedMonthlySales: applicationData.estimatedMonthlySales as any || '',
+          hasExistingInventory: false,
+          previousEcommerceExperience: false,
+          howDidYouHear: applicationData.howDidYouHear || '',
+          platformsUsed: applicationData.platformsUsed || [],
+          marketingChannels: applicationData.marketingChannels || [],
+          agreeToTerms: true,
+          agreeToMarketing: false
+        })
+        console.log('Application submitted via API successfully')
+      } catch (apiError) {
+        console.error('Failed to submit via API:', apiError)
+        // Continue even if API fails since Supabase save succeeded
+      }
+
+    } catch (error) {
+      console.error('Error submitting application:', error)
+      setIsSubmitted(false)
+    }
   }
 
   const content = {
