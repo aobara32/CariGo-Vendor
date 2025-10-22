@@ -78,6 +78,7 @@ const Apply = () => {
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [submitError, setSubmitError] = useState<string>('')
 
   // Country codes with Brunei first, Malaysia second, then alphabetical
   const countryCodes = [
@@ -339,6 +340,33 @@ const Apply = () => {
           // Validate both country and phone number
           if (!formData.phoneCountry || !formData.phone.trim()) {
             newErrors['phoneCountry'] = 'Required'
+          } else if (formData.phone.trim()) {
+            // Enhanced phone number validation
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{7,20}$/
+            if (!phoneRegex.test(formData.phone.trim())) {
+              newErrors['phone'] = 'Please enter a valid phone number (7-20 digits)'
+            }
+          }
+        } else if (f.name === 'email') {
+          // Enhanced email validation
+          const email = String(formData[f.name as keyof typeof formData] || '').trim()
+          if (!email) {
+            newErrors[f.name] = 'Required'
+          } else {
+            const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+            if (!emailRegex.test(email)) {
+              newErrors[f.name] = 'Please enter a valid email address'
+            }
+          }
+        } else if (f.name === 'firstName' || f.name === 'lastName') {
+          // Name validation
+          const name = String(formData[f.name as keyof typeof formData] || '').trim()
+          if (!name) {
+            newErrors[f.name] = 'Required'
+          } else if (name.length < 2) {
+            newErrors[f.name] = 'Name must be at least 2 characters'
+          } else if (name.length > 50) {
+            newErrors[f.name] = 'Name must be less than 50 characters'
           }
         } else if (f.required && !String(formData[f.name as keyof typeof formData] || '').trim()) {
           newErrors[f.name] = 'Required'
@@ -353,6 +381,16 @@ const Apply = () => {
           if (formData.hasBusinessNumber) {
             const v = String(formData[f.name as keyof typeof formData] || '').trim()
             if (!v) newErrors[f.name] = 'Required'
+          }
+        } else if (f.name === 'businessName') {
+          // Business name validation
+          const businessName = String(formData[f.name as keyof typeof formData] || '').trim()
+          if (!businessName) {
+            newErrors[f.name] = 'Required'
+          } else if (businessName.length < 2) {
+            newErrors[f.name] = 'Business name must be at least 2 characters'
+          } else if (businessName.length > 200) {
+            newErrors[f.name] = 'Business name must be less than 200 characters'
           }
         } else if (f.required) {
           const v = String(formData[f.name as keyof typeof formData] || '').trim()
@@ -387,7 +425,20 @@ const Apply = () => {
 
   const nextStep = () => {
     if (currentStep < 4) {
-      if (validateStep(currentStep)) setCurrentStep(currentStep + 1)
+      const isValid = validateStep(currentStep)
+      console.log(`Step ${currentStep} validation result:`, isValid)
+      console.log('Current errors:', errors)
+      console.log('Current form data:', formData)
+      if (isValid) {
+        setCurrentStep(currentStep + 1)
+      } else {
+        console.log('Validation failed, staying on step', currentStep)
+        // Show alert with specific error details
+        const errorFields = Object.keys(errors)
+        if (errorFields.length > 0) {
+          alert(`Please fix the following errors:\n${errorFields.map(field => `- ${field}: ${errors[field]}`).join('\n')}`)
+        }
+      }
     }
   }
 
@@ -401,22 +452,34 @@ const Apply = () => {
     
     try {
       setIsSubmitted(true)
+      setSubmitError('')
+      
+      // Parse sales amount from string to number (store as decimal for precision)
+      const salesMap: Record<string, number> = {
+        'Under $500': 250.00,
+        '$500-$1,000': 750.00,
+        '$1,000-$2,500': 1750.00,
+        '$2,500-$5,000': 3750.00,
+        '$5,000+': 7500.00
+      };
+      const averageSales = salesMap[formData.monthlySales] || 0.00;
       
       // Prepare data for submission
       const applicationData: VendorApplicationData = {
-        name: `${formData.firstName} ${formData.lastName}`,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         phone: `${formData.phoneCountry} ${formData.phone}`,
         businessName: formData.businessName,
-        businessType: formData.businessType as any,
-        businessRegistration: formData.businessRegistration,
-        businessAddress: formData.businessAddress,
-        specialRequirements: formData.businessDescription,
-        productCategories: formData.productCategory ? [formData.productCategory] : [],
-        estimatedMonthlySales: formData.monthlySales as any,
-        howDidYouHear: formData.experience,
-        platformsUsed: [],
-        marketingChannels: formData.marketing ? [formData.marketing] : []
+        businessType: formData.businessType,
+        registrationNumber: formData.businessRegistration,
+        address: formData.businessAddress,
+        description: formData.businessDescription,
+        productCategory: formData.productCategory,
+        averageSales: averageSales,
+        freeNote1: formData.experience,
+        freeNote2: formData.marketing,
+        freeNote3: formData.expectations
       }
 
       const files: ApplicationFiles = {
@@ -432,41 +495,14 @@ const Apply = () => {
         console.log('Application saved to Supabase successfully')
       } else {
         console.error('Failed to save to Supabase:', supabaseResult.error)
-      }
-
-      // Also send via backend API for email confirmation
-      try {
-        await apiService.submitApplicationForm({
-          name: applicationData.name,
-          email: applicationData.email,
-          phone: applicationData.phone,
-          businessName: applicationData.businessName,
-          businessType: applicationData.businessType as any || '',
-          businessRegistration: applicationData.businessRegistration || '',
-          businessAddress: applicationData.businessAddress || '',
-          industry: '',
-          yearsInBusiness: 0,
-          numberOfEmployees: 0,
-          annualRevenue: 'under-10k' as any,
-          specialRequirements: applicationData.specialRequirements || '',
-          productCategories: applicationData.productCategories || [],
-          estimatedMonthlySales: applicationData.estimatedMonthlySales as any || '',
-          hasExistingInventory: false,
-          previousEcommerceExperience: false,
-          howDidYouHear: applicationData.howDidYouHear || '',
-          platformsUsed: applicationData.platformsUsed || [],
-          marketingChannels: applicationData.marketingChannels || [],
-          agreeToTerms: true,
-          agreeToMarketing: false
-        })
-        console.log('Application submitted via API successfully')
-      } catch (apiError) {
-        console.error('Failed to submit via API:', apiError)
-        // Continue even if API fails since Supabase save succeeded
+        setSubmitError(supabaseResult.error || 'Failed to save application. Please try again.')
+        setIsSubmitted(false)
+        return
       }
 
     } catch (error) {
       console.error('Error submitting application:', error)
+      setSubmitError('An unexpected error occurred. Please try again.')
       setIsSubmitted(false)
     }
   }
@@ -791,32 +827,42 @@ const Apply = () => {
                             {field.label} {field.required && <span className="text-primary">*</span>}
                           </Label>
                           {field.type === 'phoneCountry' ? (
-                            <div className="mt-2 flex border border-input rounded-md bg-background">
-                              <div className="flex items-center px-3 py-2 border-r border-input">
-                                <span className="text-sm">
-                                  {countryCodes.find(c => c.code === formData.phoneCountry)?.flag || '🇧🇳'}
-                                </span>
-                                <select
-                                  value={formData.phoneCountry}
-                                  onChange={(e) => handleInputChange('phoneCountry', e.target.value)}
-                                  className="ml-2 bg-transparent border-none outline-none text-sm font-medium"
-                                >
-                                  {countryCodes.map((country) => (
-                                    <option key={country.code} value={country.code}>
-                                      {country.code}
-                                    </option>
-                                  ))}
-                                </select>
+                            <>
+                              <div className="mt-2 flex border border-input rounded-md bg-background">
+                                <div className="flex items-center px-3 py-2 border-r border-input">
+                                  <span className="text-sm">
+                                    {countryCodes.find(c => c.code === formData.phoneCountry)?.flag || '🇧🇳'}
+                                  </span>
+                                  <select
+                                    value={formData.phoneCountry}
+                                    onChange={(e) => handleInputChange('phoneCountry', e.target.value)}
+                                    className="ml-2 bg-transparent border-none outline-none text-sm font-medium"
+                                  >
+                                    {countryCodes.map((country) => (
+                                      <option key={country.code} value={country.code}>
+                                        {country.code}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <Input
+                                  type="tel"
+                                  placeholder={language === 'en' ? 'Enter phone number' : 'Masukkan nombor telefon'}
+                                  value={formData.phone}
+                                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                                  className="border-0 focus-visible:ring-0"
+                                  required={true}
+                                />
                               </div>
-                              <Input
-                                type="tel"
-                                placeholder={language === 'en' ? 'Enter phone number' : 'Masukkan nombor telefon'}
-                                value={formData.phone}
-                                onChange={(e) => handleInputChange('phone', e.target.value)}
-                                className="border-0 focus-visible:ring-0"
-                                required={true}
-                              />
-                            </div>
+                              {(errors['phoneCountry'] || errors['phone']) && (
+                                <div className="text-sm text-red-600 mt-1">
+                                  {errors['phoneCountry'] === 'Required' 
+                                    ? (language === 'en' ? 'Phone number is required' : 'Nombor telefon diperlukan')
+                                    : errors['phone'] || errors['phoneCountry']
+                                  }
+                                </div>
+                              )}
+                            </>
                           ) : field.type === 'textarea' ? (
                             <Textarea
                               id={field.name}
@@ -839,7 +885,12 @@ const Apply = () => {
                             />
                           )}
                           {errors[field.name] && (
-                            <div className="text-sm text-red-600 mt-1">{language === 'en' ? 'This field is required' : 'Medan ini diperlukan'}</div>
+                            <div className="text-sm text-red-600 mt-1">
+                              {errors[field.name] === 'Required' 
+                                ? (language === 'en' ? 'This field is required' : 'Medan ini diperlukan')
+                                : errors[field.name]
+                              }
+                            </div>
                           )}
                         </div>
                       ))}
@@ -963,7 +1014,12 @@ const Apply = () => {
                             />
                           )}
                           {errors[field.name] && (
-                            <div className="text-sm text-red-600 mt-1">{language === 'en' ? 'This field is required' : 'Medan ini diperlukan'}</div>
+                            <div className="text-sm text-red-600 mt-1">
+                              {errors[field.name] === 'Required' 
+                                ? (language === 'en' ? 'This field is required' : 'Medan ini diperlukan')
+                                : errors[field.name]
+                              }
+                            </div>
                           )}
                         </div>
                       ))}
@@ -1049,6 +1105,16 @@ const Apply = () => {
                   </div>
                 )}
 
+                {/* Error Message */}
+                {submitError && (
+                  <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5 text-red-600" />
+                      <span className="text-red-800">{submitError}</span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Navigation Buttons */}
                 <div className="flex justify-between mt-12 pt-8 border-t">
                   <Button
@@ -1066,8 +1132,17 @@ const Apply = () => {
                       {language === 'en' ? 'Next' : 'Seterusnya'} <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   ) : (
-                    <Button type="submit">
-                      {language === 'en' ? 'Submit Application' : 'Hantar Permohonan'} <CheckCircle2 className="w-4 h-4 ml-2" />
+                    <Button type="submit" disabled={isSubmitted}>
+                      {isSubmitted ? (
+                        <>
+                          <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          {language === 'en' ? 'Submitting...' : 'Menghantar...'}
+                        </>
+                      ) : (
+                        <>
+                          {language === 'en' ? 'Submit Application' : 'Hantar Permohonan'} <CheckCircle2 className="w-4 h-4 ml-2" />
+                        </>
+                      )}
                     </Button>
                   )}
                 </div>

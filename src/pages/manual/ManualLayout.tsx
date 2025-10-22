@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { supabaseService, VendorInquiryData } from '../../services/supabaseService'
@@ -31,7 +31,7 @@ type ManualNavItem = {
   isPro?: boolean
 }
 
-export const manualNavItems: ManualNavItem[] = [
+const manualNavItems: ManualNavItem[] = [
   { 
     key: 'getting-started', 
     path: '/manual/getting-started', 
@@ -314,6 +314,11 @@ const ManualLayout = ({
 }) => {
   const { language } = useLanguage()
   const location = useLocation()
+  
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [location.pathname])
   
   // Get current page info
   const currentItem = manualNavItems.find(item => item.path === location.pathname)

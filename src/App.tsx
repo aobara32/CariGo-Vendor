@@ -29,6 +29,7 @@ import ManualShippingPolicies from './pages/manual/ShippingPoliciesManual'
 import ManualReturnPolicies from './pages/manual/ReturnPoliciesManual'
 import ManualPaymentsPayouts from './pages/manual/PaymentsPayoutsManual'
 import ManualAccountSettings from './pages/manual/AccountSettingsManual'
+import SupabaseTest from './pages/SupabaseTest'
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route path="/manual/return-policies" element={<ManualReturnPolicies />} />
           <Route path="/manual/payments-payouts" element={<ManualPaymentsPayouts />} />
           <Route path="/manual/account-settings" element={<ManualAccountSettings />} />
+          <Route path="/supabase-test" element={<SupabaseTest />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>
