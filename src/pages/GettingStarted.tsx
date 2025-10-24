@@ -143,7 +143,7 @@ const GettingStarted = () => {
             icon: Mail,
             title: 'Email Support',
             description: 'Get help via email within 24 hours',
-            contact: 'carigobn@gmail.com'
+            contact: 'support@carigobn.com'
           },
           {
             icon: Phone,
@@ -302,7 +302,7 @@ const GettingStarted = () => {
             icon: Mail,
             title: 'Sokongan E-mel',
             description: 'Dapatkan bantuan melalui e-mel dalam 24 jam',
-            contact: 'carigobn@gmail.com'
+            contact: 'support@carigobn.com'
           },
           {
             icon: Phone,
@@ -514,9 +514,9 @@ const GettingStarted = () => {
                   <h3 className="text-2xl font-bold mb-4">{option.title}</h3>
                   <p className="text-muted-foreground mb-6">{option.description}</p>
                   {option.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
-                    <a href="mailto:carigobn@gmail.com" className="block">
-                      <Button variant="outline" className="w-full">{language === 'en' ? 'Send Email' : 'Hantar E-mel'}</Button>
-                    </a>
+                    <Link to="/inquiry" className="block">
+                      <Button variant="outline" className="w-full">{language === 'en' ? 'Contact Us' : 'Hubungi Kami'}</Button>
+                    </Link>
                   ) : option.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
                     <a href="tel:+6738228250" className="block">
                       <Button variant="outline" className="w-full">{language === 'en' ? 'Call Now' : 'Panggil Sekarang'}</Button>

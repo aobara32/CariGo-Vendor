@@ -81,7 +81,7 @@ const Support = () => {
             icon: Mail,
             title: 'Email Support',
             description: 'Get help via email',
-            action: 'Send Email',
+            action: 'Contact Us',
             contact: 'carigobn@gmail.com'
           }
         ]
@@ -226,7 +226,7 @@ const Support = () => {
             icon: Mail,
             title: 'Sokongan E-mel',
             description: 'Dapatkan bantuan melalui e-mel',
-            action: 'Hantar E-mel',
+            action: 'Hubungi Kami',
             contact: 'carigobn@gmail.com'
           }
         ]
@@ -416,11 +416,11 @@ const Support = () => {
                       </Button>
                     </a>
                   ) : option.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
-                    <a href="mailto:carigobn@gmail.com" className="block">
+                    <Link to="/inquiry" className="block">
                       <Button variant="outline" className="w-full">
                         {option.action}
                       </Button>
-                    </a>
+                    </Link>
                   ) : (
                     <Button variant="outline" className="w-full">
                       {option.action}
@@ -553,11 +553,11 @@ const Support = () => {
                       </Button>
                     </a>
                   ) : method.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
-                    <a href="mailto:carigobn@gmail.com" className="block">
+                    <Link to="/inquiry" className="block">
                       <Button variant="outline" className="w-full">
-                        {language === 'en' ? 'Send Email' : 'Hantar E-mel'}
+                        {language === 'en' ? 'Contact Us' : 'Hubungi Kami'}
                       </Button>
-                    </a>
+                    </Link>
                   ) : ( 
                     <Button variant="outline" className="w-full" disabled>
                       {language === 'en' ? 'Coming Soon' : 'Akan Datang'}

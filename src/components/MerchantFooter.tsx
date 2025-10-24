@@ -21,8 +21,8 @@ const MerchantFooter = () => {
           <div className="space-y-3">
             <div className="flex items-start gap-3 text-sm">
               <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-              <a href="mailto:carigobn@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                carigobn@gmail.com
+              <a href="/inquiry" className="text-muted-foreground hover:text-primary transition-colors">
+                support@carigobn.com
               </a>
             </div>
             <div className="flex items-start gap-3 text-sm">
@@ -41,6 +41,7 @@ const MerchantFooter = () => {
             <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
             <li><Link to="/getting-started" className="text-muted-foreground hover:text-primary transition-colors">Getting Started</Link></li>
             <li><Link to="/support" className="text-muted-foreground hover:text-primary transition-colors">Support</Link></li>
+            <li><Link to="/inquiry" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
           </ul>
         </div>
         
@@ -49,6 +50,8 @@ const MerchantFooter = () => {
           <ul className="space-y-2">
             <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
             <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
+            <li><Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/terms-of-service" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
           </ul>
         </div>
 

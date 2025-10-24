@@ -10,20 +10,21 @@ export interface VendorInquiryData {
 }
 
 export interface VendorApplicationData {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
-  businessName: string;
-  businessType?: string;
-  registrationNumber?: string;
+  business_name: string;
+  business_type?: string;
+  registration_number?: string;
   address?: string;
   description?: string;
-  productCategory?: string;
-  averageSales?: number;
-  freeNote1?: string;
-  freeNote2?: string;
-  freeNote3?: string;
+  product_category?: string;
+  average_sales?: number;
+  free_note_1?: string;
+  free_note_2?: string;
+  free_note_3?: string;
+  Number_of_Products?: string;
 }
 
 export interface ApplicationFiles {
@@ -123,24 +124,47 @@ class SupabaseService {
       // サービスロールクライアントが利用可能な場合はそれを使用（RLSをバイパス）
       const client = supabaseAdmin || supabase;
       
+      // デバッグ用ログ
+      console.log('Saving vendor application with data:', {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        phone: data.phone,
+        business_name: data.business_name,
+        business_type: data.business_type,
+        registration_number: data.registration_number,
+        address: data.address,
+        description: data.description,
+        product_category: data.product_category,
+        average_sales: data.average_sales,
+        free_note_1: data.free_note_1,
+        free_note_2: data.free_note_2,
+        free_note_3: data.free_note_3,
+        Number_of_Products: data.Number_of_Products,
+        business_cert_file: businessCertPath,
+        id_doc_file: idDocPath,
+        bank_info_file: bankInfoPath
+      });
+      
       const { error } = await client
         .from('vendor_applications')
         .insert([
           {
-            first_name: data.firstName,
-            last_name: data.lastName,
+            first_name: data.first_name,
+            last_name: data.last_name,
             email: data.email,
             phone: data.phone,
-            business_name: data.businessName,
-            business_type: data.businessType || null,
-            registration_number: data.registrationNumber || null,
+            business_name: data.business_name,
+            business_type: data.business_type || null,
+            registration_number: data.registration_number || null,
             address: data.address || null,
             description: data.description || '',
-            product_category: data.productCategory || '',
-            average_sales: data.averageSales || 0,
-            free_note_1: data.freeNote1 || '',
-            free_note_2: data.freeNote2 || '',
-            free_note_3: data.freeNote3 || '',
+            product_category: data.product_category || '',
+            average_sales: data.average_sales || 0,
+            free_note_1: data.free_note_1 || '',
+            free_note_2: data.free_note_2 || '',
+            free_note_3: data.free_note_3 || '',
+            Number_of_Products: data.Number_of_Products || '',
             business_cert_file: businessCertPath,
             id_doc_file: idDocPath,
             bank_info_file: bankInfoPath
@@ -165,24 +189,24 @@ class SupabaseService {
             }
             
             const apiResult = await apiService.submitApplicationForm({
-              name: `${data.firstName} ${data.lastName}`,
+              name: `${data.first_name} ${data.last_name}`,
               email: data.email,
               phone: data.phone,
-              businessName: data.businessName,
-              businessType: data.businessType as any || 'other',
-              businessRegistration: data.registrationNumber,
+              businessName: data.business_name,
+              businessType: data.business_type as any || 'other',
+              businessRegistration: data.registration_number,
               businessAddress: data.address || '',
-              industry: data.productCategory || '',
+              industry: data.product_category || '',
               yearsInBusiness: 0,
               numberOfEmployees: 0,
               annualRevenue: 'under-10k' as any,
-              productCategories: data.productCategory ? [data.productCategory] : [],
+              productCategories: data.product_category ? [data.product_category] : [],
               estimatedMonthlySales: 'under-1k' as any,
               hasExistingInventory: false,
               previousEcommerceExperience: false,
               marketingChannels: [],
-              specialRequirements: data.freeNote1 || '',
-              howDidYouHear: data.freeNote2 || '',
+              specialRequirements: data.free_note_1 || '',
+              howDidYouHear: data.free_note_2 || '',
               agreeToTerms: true,
               agreeToMarketing: false
             });
@@ -270,7 +294,7 @@ class SupabaseService {
       
       console.log('Testing Supabase connection...');
       console.log('Using admin client:', isUsingAdminClient);
-      console.log('Service role key available:', !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY);
+      console.log('Service role key available:', !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY);
       
       const { data, error } = await client
         .from('vendor_inquiries')
@@ -287,7 +311,7 @@ class SupabaseService {
             error: 'データベースのセキュリティポリシーによりアクセスが拒否されました。管理者にお問い合わせください。',
             details: {
               isUsingAdminClient,
-              hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+              hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY,
               errorMessage: error.message
             }
           };
@@ -298,7 +322,7 @@ class SupabaseService {
           error: error.message,
           details: {
             isUsingAdminClient,
-            hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+            hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY
           }
         };
       }
@@ -308,7 +332,7 @@ class SupabaseService {
         success: true,
         details: {
           isUsingAdminClient,
-          hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+          hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY
         }
       };
     } catch (error) {
@@ -318,7 +342,7 @@ class SupabaseService {
         error: (error as Error).message,
         details: {
           isUsingAdminClient: !!supabaseAdmin,
-          hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+          hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY
         }
       };
     }
@@ -370,7 +394,7 @@ class SupabaseService {
             error: 'vendor_applicationsテーブルのRLSポリシーによりINSERTが拒否されました。',
             details: {
               isUsingAdminClient,
-              hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+              hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY,
               errorMessage: error.message,
               errorCode: error.code,
               suggestion: 'SupabaseダッシュボードでRLSポリシーを設定するか、サービスロールキーを設定してください。'
@@ -383,7 +407,7 @@ class SupabaseService {
           error: error.message,
           details: {
             isUsingAdminClient,
-            hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+            hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY,
             errorCode: error.code
           }
         };
@@ -394,7 +418,7 @@ class SupabaseService {
         success: true,
         details: {
           isUsingAdminClient,
-          hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+          hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY,
           insertedData: data
         }
       };
@@ -405,7 +429,7 @@ class SupabaseService {
         error: (error as Error).message,
         details: {
           isUsingAdminClient: !!supabaseAdmin,
-          hasServiceRoleKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+          hasServiceRoleKey: !!(import.meta as any).env?.VITE_SUPABASE_SERVICE_ROLE_KEY
         }
       };
     }

@@ -464,23 +464,29 @@ const Apply = () => {
       };
       const averageSales = salesMap[formData.monthlySales] || 0.00;
       
-      // Prepare data for submission
+      // Prepare data for submission - データベーススキーマに合わせて修正
       const applicationData: VendorApplicationData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
         email: formData.email,
         phone: `${formData.phoneCountry} ${formData.phone}`,
-        businessName: formData.businessName,
-        businessType: formData.businessType,
-        registrationNumber: formData.businessRegistration,
+        business_name: formData.businessName,
+        business_type: formData.businessType,
+        registration_number: formData.businessRegistration,
         address: formData.businessAddress,
         description: formData.businessDescription,
-        productCategory: formData.productCategory,
-        averageSales: averageSales,
-        freeNote1: formData.experience,
-        freeNote2: formData.marketing,
-        freeNote3: formData.expectations
+        product_category: formData.productCategory,
+        average_sales: averageSales,
+        free_note_1: formData.experience,
+        free_note_2: formData.marketing,
+        free_note_3: formData.expectations,
+        Number_of_Products: formData.productCount || '' // データベースに存在するカラム、空文字でデフォルト
       }
+
+      // デバッグ用ログ
+      console.log('Form data productCount:', formData.productCount);
+      console.log('Application data Number_of_Products:', applicationData.Number_of_Products);
+      console.log('Full application data:', applicationData);
 
       const files: ApplicationFiles = {
         businessCert: formData.documents?.businessRegistration || undefined,

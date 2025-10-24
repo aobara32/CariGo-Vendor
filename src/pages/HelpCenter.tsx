@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import MerchantLayout from '../layouts/MerchantLayout'
 import { Card } from '../components/ui/card'
 import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import { 
-  Search,
   BookOpen,
   Video,
   FileText,
@@ -29,7 +27,6 @@ import { useLanguage } from '../contexts/LanguageContext'
 const HelpCenter = () => {
   const { language } = useLanguage()
   const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
 
   // キーワードからマニュアルページへのマッピング
@@ -413,7 +410,7 @@ const HelpCenter = () => {
           title: 'Video Tutorials',
           description: 'Step-by-step video guides',
           icon: Video,
-          action: 'Watch Videos',
+          action: 'Coming Soon',
           color: 'bg-blue-500'
         },
         {
@@ -470,8 +467,8 @@ const HelpCenter = () => {
           {
             icon: Mail,
             title: 'Email Support',
-            description: 'carigobn@gmail.com',
-            action: 'Send Email',
+            description: 'support@carigobn.com',
+            action: 'Contact Us',
             available: true
           }
         ]
@@ -606,7 +603,7 @@ const HelpCenter = () => {
           title: 'Tutorial Video',
           description: 'Panduan video langkah demi langkah',
           icon: Video,
-          action: 'Tonton Video',
+          action: 'Akan Datang',
           color: 'bg-blue-500'
         },
         {
@@ -663,8 +660,8 @@ const HelpCenter = () => {
           {
             icon: Mail,
             title: 'Sokongan E-mel',
-            description: 'carigobn@gmail.com',
-            action: 'Hantar E-mel',
+            description: 'support@carigobn.com',
+            action: 'Hubungi Kami',
             available: true
           }
         ]
@@ -686,21 +683,6 @@ const HelpCenter = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">{c.hero.title}</h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90">{c.hero.subtitle}</p>
-            
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <Input
-                    type="text"
-                    placeholder={c.hero.searchPlaceholder}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-4 py-4 text-lg bg-white/10 backdrop-blur border-white/20 text-white placeholder:text-white/70 focus:bg-white/20"
-                  />
-                </form>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -708,30 +690,45 @@ const HelpCenter = () => {
       {/* Quick Actions */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {c.quickActions.map((action, index) => {
-              const Icon = action.icon;
-              return (
-                <Card key={index} className="p-6 text-center hover:shadow-xl transition-shadow cursor-pointer group">
-                  <div className={`w-16 h-16 rounded-full ${action.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{action.title}</h3>
-                  <p className="text-muted-foreground mb-4">{action.description}</p>
-                  {action.title === (language === 'en' ? 'Contact Support' : 'Hubungi Sokongan') ? (
-                    <Link to="/support">
-                      <Button variant="outline" className="w-full">
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
+              {c.quickActions.map((action, index) => {
+                const Icon = action.icon;
+                return (
+                  <Card key={index} className="p-6 text-center hover:shadow-xl transition-shadow cursor-pointer group">
+                    <div className={`w-16 h-16 rounded-full ${action.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">{action.title}</h3>
+                    <p className="text-muted-foreground mb-4">{action.description}</p>
+                    {action.title === (language === 'en' ? 'Contact Support' : 'Hubungi Sokongan') ? (
+                      <Link to="/inquiry">
+                        <Button variant="outline" className="w-full">
+                          {action.action}
+                        </Button>
+                      </Link>
+                    ) : action.title === (language === 'en' ? 'Documentation' : 'Dokumentasi') ? (
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => {
+                          const documentationSection = document.getElementById('documentation');
+                          if (documentationSection) {
+                            documentationSection.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }}
+                      >
                         {action.action}
                       </Button>
-                    </Link>
-                  ) : (
-                    <Button variant="outline" className="w-full">
-                      {action.action}
-                    </Button>
-                  )}
-                </Card>
-              );
-            })}
+                    ) : (
+                      <Button variant="outline" className="w-full" disabled>
+                        {action.action}
+                      </Button>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -744,18 +741,7 @@ const HelpCenter = () => {
           </h2>
           
           <div className="max-w-4xl mx-auto space-y-4">
-            {c.categories
-              .map((category) => ({
-                ...category,
-                articles: category.articles.filter(a => normalize(a).includes(normalize(searchQuery)))
-              }))
-              .filter(category => 
-                normalize(category.title).includes(normalize(searchQuery)) ||
-                normalize(category.description).includes(normalize(searchQuery)) ||
-                category.articles.length > 0 ||
-                searchQuery.trim() === ''
-              )
-              .map((category) => {
+            {c.categories.map((category) => {
               const Icon = category.icon;
               const isExpanded = expandedCategory === category.id;
               
@@ -825,7 +811,7 @@ const HelpCenter = () => {
       </section>
 
       {/* Documentation */}
-      <section className="py-20">
+      <section id="documentation" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">{c.documentation.title}</h2>
           <p className="text-center text-muted-foreground mb-16 text-lg">{c.documentation.subtitle}</p>
@@ -877,10 +863,7 @@ const HelpCenter = () => {
                   <Lightbulb className="w-6 h-6 text-secondary" />
                   {faq.question}
                 </h3>
-                <p 
-                  className="text-muted-foreground leading-relaxed hover:underline cursor-pointer"
-                  onClick={() => handleKeywordClick(faq.answer)}
-                >
+                <p className="text-muted-foreground leading-relaxed">
                   {faq.answer}
                 </p>
               </Card>
@@ -906,13 +889,33 @@ const HelpCenter = () => {
                     </div>
                     <h3 className="text-2xl font-bold mb-4 text-white">{method.title}</h3>
                     <p className="text-white/80 mb-6">{method.description}</p>
-                    <Button 
-                      variant="outlineWhite" 
-                      className="w-full"
-                      disabled={true}
-                    >
-                      {method.action}
-                    </Button>
+                    {method.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
+                      <Link to="/inquiry">
+                        <Button 
+                          variant="outlineWhite" 
+                          className="w-full"
+                        >
+                          {method.action}
+                        </Button>
+                      </Link>
+                    ) : method.title === (language === 'en' ? 'Phone Support' : 'Sokongan Telefon') ? (
+                      <a href="tel:+6738228250">
+                        <Button 
+                          variant="outlineWhite" 
+                          className="w-full"
+                        >
+                          {method.action}
+                        </Button>
+                      </a>
+                    ) : (
+                      <Button 
+                        variant="outlineWhite" 
+                        className="w-full"
+                        disabled={true}
+                      >
+                        {method.action}
+                      </Button>
+                    )}
                   </Card>
                 );
               })}

@@ -12,6 +12,9 @@ import Support from './pages/Support'
 import FAQ from './pages/FAQ'
 import Apply from './pages/Apply'
 import HelpCenter from './pages/HelpCenter'
+import Inquiry from './pages/Inquiry'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
 // Manual pages
 import ManualGettingStarted from './pages/manual/GettingStartedManual'
 import ManualStoreManagement from './pages/manual/StoreManagementManual'
@@ -46,6 +49,9 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/apply" element={<Apply />} />
           <Route path="/help" element={<HelpCenter />} />
+          <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* Manual routes */}
           <Route path="/manual/getting-started" element={<ManualGettingStarted />} />
           <Route path="/manual/store-management" element={<ManualStoreManagement />} />

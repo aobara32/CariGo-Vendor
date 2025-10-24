@@ -157,8 +157,8 @@ const FAQ = () => {
           {
             icon: Mail,
             title: 'Email Support',
-            description: 'carigobn@gmail.com',
-            action: 'Send Email'
+            description: 'support@carigobn.com',
+            action: 'Contact Us'
           },
           {
             icon: Phone,
@@ -308,8 +308,8 @@ const FAQ = () => {
           {
             icon: Mail,
             title: 'Sokongan E-mel',
-            description: 'carigobn@gmail.com',
-            action: 'Hantar E-mel'
+            description: 'support@carigobn.com',
+            action: 'Hubungi Kami'
           },
           {
             icon: Phone,
@@ -423,11 +423,11 @@ const FAQ = () => {
                       </Button> 
                     </a>
                   ) : option.title === (language === 'en' ? 'Email Support' : 'Sokongan E-mel') ? (
-                    <a href="mailto:carigobn@gmail.com" className="block">
+                    <Link to="/inquiry" className="block">
                       <Button variant="outline" className="w-full">
-                        {option.action}
+                        {language === 'en' ? 'Contact Us' : 'Hubungi Kami'}
                       </Button>
-                    </a>
+                    </Link>
                   ) : option.title === (language === 'en' ? 'Live Chat' : 'Chat Langsung') ? (
                     <Button variant="outline" className="w-full" disabled>
                       {language === 'en' ? 'Coming Soon' : 'Akan Datang'}
