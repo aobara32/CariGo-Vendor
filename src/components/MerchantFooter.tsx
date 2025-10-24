@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, Phone } from 'lucide-react'
+import logoImage from '../../assets/logo.png'
 
 const MerchantFooter = () => {
   return (
@@ -8,9 +9,11 @@ const MerchantFooter = () => {
       <div className="container mx-auto px-4 py-10 grid grid-cols-4 gap-8 text-sm">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xl">C</span>
-            </div>
+            <img 
+              src={logoImage} 
+              alt="CariGo Logo" 
+              className="w-8 h-8 object-contain"
+            />
             <span className="text-xl font-bold">CariGo</span>
           </div>
           <p className="text-sm text-muted-foreground mb-6 max-w-sm">

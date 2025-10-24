@@ -3,6 +3,7 @@ import MerchantLayout from '../layouts/MerchantLayout'
 import { Card } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { Link } from 'react-router-dom'
+import logoImage from '../assets/hero-merchant.jpg'
 import { 
   BarChart3,
   Zap,
@@ -346,6 +347,11 @@ const Features = ({ children }: { children?: React.ReactNode }) => {
     <MerchantLayout>
       {/* Hero Section */}
       <section className="relative min-h-[500px] flex items-center bg-gradient-to-br from-primary via-primary to-primary/90 text-white overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+          style={{ backgroundImage: `url(${logoImage})` }}
+        />
         <div className="container mx-auto px-4 relative z-10 py-20">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">{c.hero.title}</h1>
