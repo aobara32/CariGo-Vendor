@@ -99,32 +99,6 @@ const Index = () => {
           }
         ]
       },
-      proof: {
-        title: "Real Stories from Real Merchants",
-        testimonials: [
-          {
-            quote: "I was worried about the technical side, but CariGo made it so easy. I uploaded my first 30 products in under an hour.",
-            author: "Siti Rahman",
-            business: "Home Decor Shop",
-            result: "Launched in 3 days",
-            avatar: "SR"
-          },
-          {
-            quote: "The CSV import saved me hours every week. I can update all my prices at once instead of doing it manually.",
-            author: "James Wong",
-            business: "Electronics Retailer",
-            result: "Saves 10hrs/week",
-            avatar: "JW"
-          },
-          {
-            quote: "Weekly payouts changed everything for us. Better cash flow means we can restock faster and serve more customers.",
-            author: "Nurul Hassan",
-            business: "Fashion Boutique",
-            result: "Revenue +180%",
-            avatar: "NH"
-          }
-        ]
-      },
       howItWorks: {
         title: "Getting Started is Simple",
         subtitle: "Four steps to your online store",
@@ -214,32 +188,6 @@ const Index = () => {
             icon: TrendingUp,
             title: "Berkembang Mengikut Rentak Anda",
             description: "Mulakan percuma, naik taraf bila bersedia. Dari 50 produk ke tanpa had. Kami berkembang dengan anda."
-          }
-        ]
-      },
-      proof: {
-        title: "Kisah Sebenar dari Pedagang Sebenar",
-        testimonials: [
-          {
-            quote: "Saya bimbang tentang bahagian teknikal, tetapi CariGo menjadikannya sangat mudah. Saya muat naik 30 produk pertama saya dalam masa kurang sejam.",
-            author: "Siti Rahman",
-            business: "Kedai Hiasan Rumah",
-            result: "Dilancarkan dalam 3 hari",
-            avatar: "SR"
-          },
-          {
-            quote: "Import CSV menjimatkan masa saya berjam-jam setiap minggu. Saya boleh kemas kini semua harga sekaligus berbanding melakukannya secara manual.",
-            author: "James Wong",
-            business: "Peruncit Elektronik",
-            result: "Jimat 10jam/minggu",
-            avatar: "JW"
-          },
-          {
-            quote: "Pembayaran mingguan mengubah segalanya untuk kami. Aliran tunai lebih baik bermakna kami boleh stok semula lebih cepat dan melayan lebih ramai pelanggan.",
-            author: "Nurul Hassan",
-            business: "Butik Fesyen",
-            result: "Hasil +180%",
-            avatar: "NH"
           }
         ]
       },
@@ -411,44 +359,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">{c.proof.title}</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {c.proof.testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-8 hover:shadow-xl transition-shadow relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                  <img src={successImage} alt="Success" className="w-full h-full object-cover rounded-full" />
-                </div>
-                <div className="relative z-10">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-secondary text-secondary" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-6 italic leading-relaxed">"{testimonial.quote}"</p>
-                  <div className="border-t pt-4">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <span className="font-semibold text-primary">{testimonial.avatar}</span>
-                      </div>
-                      <div>
-                        <div className="font-semibold">{testimonial.author}</div>
-                        <div className="text-sm text-muted-foreground">{testimonial.business}</div>
-                      </div>
-                    </div>
-                    <div className="mt-2 inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                      {testimonial.result}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* How It Works Preview */}
       <section className="py-20 bg-gradient-to-br from-primary via-primary to-primary/90 text-white">
