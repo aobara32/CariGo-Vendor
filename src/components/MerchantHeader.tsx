@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import { Button } from './ui/button'
-import logoImage from '../assets/logo.png' 
 
 const MerchantHeader = () => {
   const { language, setLanguage } = useLanguage()
@@ -11,10 +10,12 @@ const MerchantHeader = () => {
     <header className="w-full border-b bg-white sticky top-0 z-40">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 flex items-center justify-center shrink-0">
             <img 
-              src={logoImage} 
+                
+              src="/logo.png" 
               alt="CariGo Logo" 
+              
               className="w-6 h-6 object-contain"
             />
           </div>
