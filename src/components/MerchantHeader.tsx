@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import { Button } from './ui/button'
-import logoImage from '../../assets/logo.png' 
+import logoImage from '../assets/logo.png' 
 
 const MerchantHeader = () => {
   const { language, setLanguage } = useLanguage()
@@ -11,12 +11,14 @@ const MerchantHeader = () => {
     <header className="w-full border-b bg-white sticky top-0 z-40">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <img 
-            src={logoImage} 
-            alt="CariGo Logo" 
-            className="w-8 h-8 object-contain"
-          />
-          <span className="text-xl font-bold text-foreground">CariGo</span>
+          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
+            <img 
+              src={logoImage} 
+              alt="CariGo Logo" 
+              className="w-6 h-6 object-contain"
+            />
+          </div>
+          <span className="text-xl font-bold text-foreground font-racing">CariGo</span>
           <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold hidden sm:inline">
             {language === 'en' ? 'For Merchants' : 'Untuk Peniaga'}
           </span>

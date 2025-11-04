@@ -270,30 +270,30 @@ const Index = () => {
               <div className="absolute inset-0 bg-primary/80"></div>
             </div>
             <div className="relative z-10 py-20 px-8">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
-                  <div className="text-5xl font-bold text-primary mb-2">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
+                <Card className="p-4 md:p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2 break-words">
                     $50M
                   </div>
-                  <div className="text-muted-foreground">{language === 'en' ? 'Brunei Market Size' : 'Saiz Pasaran Brunei'}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{language === 'en' ? 'Brunei Market Size' : 'Saiz Pasaran Brunei'}</div>
                 </Card>
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
-                  <div className="text-5xl font-bold text-primary mb-2">
+                <Card className="p-4 md:p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2 break-words">
                     45,000+
                   </div>
-                  <div className="text-muted-foreground">{language === 'en' ? 'Target Customers' : 'Pelanggan Sasaran'}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{language === 'en' ? 'Target Customers' : 'Pelanggan Sasaran'}</div>
                 </Card>
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
-                  <div className="text-5xl font-bold text-primary mb-2">
+                <Card className="p-4 md:p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2 break-words">
                     15%
                   </div>
-                  <div className="text-muted-foreground">{language === 'en' ? 'Online Penetration' : 'Penembusan Dalam Talian'}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{language === 'en' ? 'Online Penetration' : 'Penembusan Dalam Talian'}</div>
                 </Card>
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
-                  <div className="text-5xl font-bold text-primary mb-2">
+                <Card className="p-4 md:p-8 text-center hover:shadow-lg transition-shadow border-2 bg-white/95 backdrop-blur">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2 break-words">
                     25%
                   </div>
-                  <div className="text-muted-foreground">{language === 'en' ? 'Annual Growth Rate' : 'Kadar Pertumbuhan Tahunan'}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{language === 'en' ? 'Annual Growth Rate' : 'Kadar Pertumbuhan Tahunan'}</div>
                 </Card>
               </div>
             </div>

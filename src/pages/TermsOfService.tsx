@@ -8,7 +8,7 @@ const TermsOfService = () => {
   const content = {
     en: {
       title: 'Terms of Service',
-      lastUpdated: 'Last updated: December 2024',
+      lastUpdated: 'Last updated: October 2025',
       generalTerms: {
         title: 'Terms of Service (For General Users)',
         sections: [
@@ -180,7 +180,7 @@ const TermsOfService = () => {
     },
     ms: {
       title: 'Terma Perkhidmatan',
-      lastUpdated: 'Kemaskini terakhir: Disember 2024',
+      lastUpdated: 'Kemaskini terakhir: Oktober 2025',
       generalTerms: {
         title: 'Terma Perkhidmatan (Untuk Pengguna Umum)',
         sections: [
